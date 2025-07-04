@@ -34,6 +34,22 @@ export async function deleteContactMessage(id: string) {
   const { error } = await supabase.from('contact_messages').delete().eq('id', id);
 
   if (error) {
+    console.error('Error deleting message:', error);
+    return { error: error.message };
+  }
+
+  revalidatePath('/admin/messages');
+}
+
+export async function updateMessageStatus(id: string, status: 'read' | 'archived') {
+  const supabase = createActionClient();
+  const { error } = await supabase
+    .from('contact_messages')
+    .update({ status: status })
+    .eq('id', id);
+
+  if (error) {
+    console.error(`Error updating message status to ${status}:`, error);
     return { error: error.message };
   }
 

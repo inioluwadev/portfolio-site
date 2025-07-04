@@ -67,6 +67,7 @@ export const contactMessageSchema = z.object({
   name: z.string(),
   email: z.string().email(),
   message: z.string(),
+  status: z.enum(['unread', 'read', 'archived']).default('unread'),
 });
 export type ContactMessage = z.infer<typeof contactMessageSchema>;
 
