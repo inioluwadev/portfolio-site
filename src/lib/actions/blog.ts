@@ -7,7 +7,7 @@ import { getAboutContent } from '@/lib/data';
 
 const parser = new Parser();
 
-export async function syncBlogPosts() {
+export async function syncBlogPosts(prevState: any, formData: FormData) {
   const aboutContent = await getAboutContent();
   const RSS_URL = aboutContent?.rss_url;
 

@@ -30,7 +30,7 @@ export async function updateManifestoCoreBelief(prevState: any, formData: FormDa
 }
 
 // Principles Actions
-export async function createManifestoPrinciple(formData: FormData) {
+export async function createManifestoPrinciple(prevState: any, formData: FormData) {
   const supabase = createActionClient();
   const values = Object.fromEntries(formData.entries());
   const validatedData = manifestoPrincipleSchema.safeParse(values);
@@ -50,7 +50,7 @@ export async function createManifestoPrinciple(formData: FormData) {
   redirect('/admin/manifesto');
 }
 
-export async function updateManifestoPrinciple(id: string, formData: FormData) {
+export async function updateManifestoPrinciple(id: string, prevState: any, formData: FormData) {
   const supabase = createActionClient();
   const values = Object.fromEntries(formData.entries());
   const validatedData = manifestoPrincipleSchema.safeParse(values);

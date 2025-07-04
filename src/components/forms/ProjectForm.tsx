@@ -33,7 +33,7 @@ function SubmitButton({ isEditing }: { isEditing: boolean }) {
 
 type ProjectFormProps = {
   project?: Project;
-  formAction: (payload: FormData) => void;
+  formAction: (prevState: any, formData: FormData) => Promise<void | { error?: any }>;
 };
 
 export function ProjectForm({ project, formAction }: ProjectFormProps) {

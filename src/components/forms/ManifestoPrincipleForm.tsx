@@ -25,7 +25,7 @@ function SubmitButton({ isEditing }: { isEditing: boolean }) {
 
 type ManifestoPrincipleFormProps = {
   principle?: ManifestoPrinciple;
-  formAction: (payload: FormData) => void;
+  formAction: (prevState: any, formData: FormData) => Promise<void | { error?: any; }>;
 };
 
 export function ManifestoPrincipleForm({ principle, formAction }: ManifestoPrincipleFormProps) {
