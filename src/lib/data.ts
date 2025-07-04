@@ -6,10 +6,16 @@ import type { AboutContent, BlogPost, ContactMessage, ManifestoCoreBelief, Manif
 // because they don't have access to the request cookies and should not depend on a user session.
 import { createClient as createAnonClient } from '@supabase/supabase-js';
 
-const getAnonClient = () => createAnonClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+const getAnonClient = () => {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error('Supabase URL or Anon Key is missing. Please check your .env.local file and ensure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set.');
+  }
+  
+  return createAnonClient(supabaseUrl, supabaseAnonKey);
+}
 
 const RLS_HINT = "This might be due to missing RLS policies. Please ensure public users have SELECT access on the corresponding table.";
 
