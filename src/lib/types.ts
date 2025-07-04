@@ -31,3 +31,16 @@ export const aboutContentSchema = z.object({
 });
 
 export type AboutContent = z.infer<typeof aboutContentSchema>;
+
+export const manifestoPrincipleSchema = z.object({
+  id: z.string().uuid().optional(),
+  created_at: z.string().optional(),
+  title: z.string().min(3, 'Title must be at least 3 characters.'),
+  description: z.string().min(10, 'Description must be at least 10 characters.'),
+});
+export type ManifestoPrinciple = z.infer<typeof manifestoPrincipleSchema>;
+
+export const manifestoCoreBeliefSchema = z.object({
+  core_belief: z.string().min(10, 'Core belief must be at least 10 characters.'),
+});
+export type ManifestoCoreBelief = z.infer<typeof manifestoCoreBeliefSchema>;

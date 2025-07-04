@@ -1,8 +1,12 @@
 import { Separator } from '@/components/ui/separator';
+import { getManifestoCoreBelief, getManifestoPrinciples } from '@/lib/actions/manifesto';
 
-const principles: { title: string; description: string }[] = [];
+export default async function ManifestoPage() {
+  const [coreBelief, principles] = await Promise.all([
+    getManifestoCoreBelief(),
+    getManifestoPrinciples(),
+  ]);
 
-export default function ManifestoPage() {
   return (
     <div className="container max-w-4xl mx-auto py-16 md:py-24 px-4">
       <header className="text-center mb-16 animate-fadeInUp">
@@ -17,18 +21,18 @@ export default function ManifestoPage() {
           <div className="text-center">
             <h2 className="font-headline text-3xl md:text-4xl text-primary">The Core Belief</h2>
             <blockquote className="mt-6 text-2xl md:text-3xl font-light italic text-foreground/90 max-w-3xl mx-auto">
-              "Your core belief about design and innovation will appear here."
+              {coreBelief ? `"${coreBelief.core_belief}"` : '"Your core belief will appear here."'}
             </blockquote>
           </div>
         </section>
 
-        {principles.length > 0 && (
+        {principles.length > 0 ? (
           <>
             <Separator className="my-16" />
             <section className="space-y-12">
               {principles.map((principle, index) => (
                 <div
-                  key={principle.title}
+                  key={principle.id}
                   className="grid md:grid-cols-3 gap-8 items-start animate-fadeInUp"
                   style={{ animationDelay: `${(index * 150) + 400}ms`}}
                 >
@@ -46,6 +50,11 @@ export default function ManifestoPage() {
               ))}
             </section>
           </>
+        ) : (
+           <div className="text-center text-muted-foreground py-10">
+              <p className="font-medium">No principles defined yet.</p>
+              <p className="text-sm">Add them in the admin dashboard to see them here.</p>
+            </div>
         )}
       </div>
     </div>
