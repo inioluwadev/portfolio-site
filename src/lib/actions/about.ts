@@ -6,15 +6,14 @@ import { revalidatePath } from 'next/cache';
 import { v4 as uuidv4 } from 'uuid';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
-async function uploadFile(file: File, supabase: SupabaseClient): Promise<string | null> {
+async function uploadFile(file: File, supabase: SupabaseClient, bucket: 'images' | 'cv'): Promise<string | null> {
     if (!file || file.size === 0) return null;
-    const bucket = 'images'; // Using the same bucket for simplicity
     const fileName = `${uuidv4()}-${file.name}`;
     const { data, error } = await supabase.storage.from(bucket).upload(fileName, file);
 
     if (error) {
-        console.error('Error uploading file:', error);
-        throw new Error('Failed to upload file.');
+        console.error(`Error uploading file to bucket ${bucket}:`, error);
+        throw new Error(`Failed to upload file to ${bucket}.`);
     }
 
     const { data: { publicUrl } } = supabase.storage.from(bucket).getPublicUrl(data.path);
@@ -34,14 +33,14 @@ export async function updateAboutContent(prevState: any, formData: FormData) {
 
     let finalImageUrl: string | null = null;
     if (imageFile && imageFile.size > 0) {
-      finalImageUrl = await uploadFile(imageFile, supabase);
+      finalImageUrl = await uploadFile(imageFile, supabase, 'images');
     } else if (originalImageUrl) {
       finalImageUrl = originalImageUrl;
     }
 
     let finalCvUrl: string | null = null;
     if (cvFile && cvFile.size > 0) {
-      finalCvUrl = await uploadFile(cvFile, supabase);
+      finalCvUrl = await uploadFile(cvFile, supabase, 'cv');
     } else if (originalCvUrl) {
       finalCvUrl = originalCvUrl;
     }
@@ -73,7 +72,7 @@ export async function updateAboutContent(prevState: any, formData: FormData) {
 
     revalidatePath('/about');
     revalidatePath('/admin/about');
-    revalidatePath('/'); // for footer
+    revalidatePath('/', 'layout'); // for footer
     revalidatePath('/blog'); // for blog sync RssInfo
     return { success: true };
   } catch (e: any) {
