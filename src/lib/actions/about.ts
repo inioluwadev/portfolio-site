@@ -6,15 +6,15 @@ import { revalidatePath } from 'next/cache';
 import { v4 as uuidv4 } from 'uuid';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
-async function uploadImage(imageFile: File, supabase: SupabaseClient): Promise<string | null> {
-    if (!imageFile || imageFile.size === 0) return null;
-    const bucket = 'images';
-    const fileName = `${uuidv4()}-${imageFile.name}`;
-    const { data, error } = await supabase.storage.from(bucket).upload(fileName, imageFile);
+async function uploadFile(file: File, supabase: SupabaseClient): Promise<string | null> {
+    if (!file || file.size === 0) return null;
+    const bucket = 'images'; // Using the same bucket for simplicity
+    const fileName = `${uuidv4()}-${file.name}`;
+    const { data, error } = await supabase.storage.from(bucket).upload(fileName, file);
 
     if (error) {
-        console.error('Error uploading image:', error);
-        throw new Error('Failed to upload image.');
+        console.error('Error uploading file:', error);
+        throw new Error('Failed to upload file.');
     }
 
     const { data: { publicUrl } } = supabase.storage.from(bucket).getPublicUrl(data.path);
@@ -27,20 +27,30 @@ export async function updateAboutContent(prevState: any, formData: FormData) {
 
   try {
     const imageFile = formData.get('image_url') as File | null;
-    const originalUrl = formData.get('image_url_original_url') as string | null;
+    const originalImageUrl = formData.get('image_url_original_url') as string | null;
+    
+    const cvFile = formData.get('cv_url') as File | null;
+    const originalCvUrl = formData.get('cv_url_original_url') as string | null;
 
     let finalImageUrl: string | null = null;
     if (imageFile && imageFile.size > 0) {
-      finalImageUrl = await uploadImage(imageFile, supabase);
-    } else if (originalUrl) {
-      finalImageUrl = originalUrl;
+      finalImageUrl = await uploadFile(imageFile, supabase);
+    } else if (originalImageUrl) {
+      finalImageUrl = originalImageUrl;
+    }
+
+    let finalCvUrl: string | null = null;
+    if (cvFile && cvFile.size > 0) {
+      finalCvUrl = await uploadFile(cvFile, supabase);
+    } else if (originalCvUrl) {
+      finalCvUrl = originalCvUrl;
     }
 
     const dataToValidate = {
       headline: values.headline,
       paragraph1: values.paragraph1,
       paragraph2: values.paragraph2,
-      cv_url: values.cv_url,
+      cv_url: finalCvUrl,
       substack_url: values.substack_url,
       rss_url: values.rss_url,
       image_url: finalImageUrl,

@@ -7,15 +7,15 @@ import { redirect } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
-async function uploadImage(imageFile: File, supabase: SupabaseClient): Promise<string | null> {
-  if (!imageFile || imageFile.size === 0) return null;
+async function uploadFile(file: File, supabase: SupabaseClient): Promise<string | null> {
+  if (!file || file.size === 0) return null;
   const bucket = 'images';
-  const fileName = `${uuidv4()}-${imageFile.name}`;
-  const { data, error } = await supabase.storage.from(bucket).upload(fileName, imageFile);
+  const fileName = `${uuidv4()}-${file.name}`;
+  const { data, error } = await supabase.storage.from(bucket).upload(fileName, file);
 
   if (error) {
-    console.error('Error uploading image:', error);
-    throw new Error(`Failed to upload image: ${error.message}`);
+    console.error('Error uploading file:', error);
+    throw new Error(`Failed to upload file: ${error.message}`);
   }
 
   const { data: { publicUrl } } = supabase.storage.from(bucket).getPublicUrl(data.path);
@@ -32,7 +32,7 @@ async function processProjectFormData(formData: FormData, supabase: SupabaseClie
   let finalMainImageUrl: string | null = null;
   
   if (mainImageFile && mainImageFile.size > 0) {
-    finalMainImageUrl = await uploadImage(mainImageFile, supabase);
+    finalMainImageUrl = await uploadFile(mainImageFile, supabase);
   } else if (mainImageOriginalUrl) {
     finalMainImageUrl = mainImageOriginalUrl;
   }
@@ -45,7 +45,7 @@ async function processProjectFormData(formData: FormData, supabase: SupabaseClie
       const originalDetailUrl = formData.get(`details_image_${i}_original_url`) as string | null;
 
       if (detailImageFile && detailImageFile.size > 0) {
-        detail.content = await uploadImage(detailImageFile, supabase) || '';
+        detail.content = await uploadFile(detailImageFile, supabase) || '';
       } else if (originalDetailUrl) {
         detail.content = originalDetailUrl;
       } else {

@@ -12,6 +12,7 @@ import { useFormState, useFormStatus } from 'react-dom';
 import { useToast } from '@/hooks/use-toast';
 import { useEffect } from 'react';
 import { ImageUpload } from '@/components/ui/ImageUpload';
+import { FileUpload } from '@/components/ui/FileUpload';
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -113,9 +114,13 @@ export function AboutForm({ aboutContent, formAction }: AboutFormProps) {
           name="cv_url"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>CV URL</FormLabel>
+              <FormLabel>CV Document (PDF)</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="/cv-placeholder.pdf or a full URL" />
+                <FileUpload
+                  name={field.name}
+                  defaultValue={field.value}
+                  accept={{ 'application/pdf': ['.pdf'] }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

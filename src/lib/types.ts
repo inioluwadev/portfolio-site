@@ -24,9 +24,9 @@ export const aboutContentSchema = z.object({
   paragraph1: z.string().min(10, 'First paragraph is required.'),
   paragraph2: z.string().min(10, 'Second paragraph is required.'),
   image_url: z.string().url('Must be a valid URL.').optional().nullable(),
-  cv_url: z.string().min(1, "CV URL cannot be empty."),
-  substack_url: z.string().url({ message: "Must be a valid Substack URL." }).optional().nullable(),
-  rss_url: z.string().url({ message: "Must be a valid RSS Feed URL." }).optional().nullable(),
+  cv_url: z.string().url({ message: "Must be a valid URL." }).optional().nullable(),
+  substack_url: z.string().url({ message: "Must be a valid Substack URL." }),
+  rss_url: z.string().url({ message: "Must be a valid RSS Feed URL." }),
 });
 
 export type AboutContent = z.infer<typeof aboutContentSchema>;
