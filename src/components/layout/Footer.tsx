@@ -2,11 +2,9 @@ import Link from 'next/link';
 import { navLinks } from '@/lib/config';
 import SocialLinks from './SocialLinks';
 import NewsletterForm from '../NewsletterForm';
-import { getAboutContent } from '@/lib/data';
-import type { SocialLink } from '@/lib/types';
+import type { SocialLink, AboutContent } from '@/lib/types';
 
-export default async function Footer({ socialLinks }: { socialLinks: SocialLink[] }) {
-  const aboutContent = await getAboutContent();
+export default function Footer({ socialLinks, aboutContent }: { socialLinks: SocialLink[], aboutContent: AboutContent | null }) {
   const substackUrl = aboutContent?.substack_url || "";
 
   return (

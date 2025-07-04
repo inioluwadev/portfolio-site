@@ -7,8 +7,9 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import AdminShortcut from '@/components/AdminShortcut';
 import './globals.css';
-import { getAboutContent, getSettings, getSocialLinks } from '@/lib/data';
+import { getAboutContent, getSettings } from '@/lib/data';
 import type { Metadata } from 'next';
+import type { SocialLink } from '@/lib/types';
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings();
@@ -57,10 +58,13 @@ export default async function RootLayout({
   const isAdminRoute = pathname.startsWith('/admin');
   const isLoginRoute = pathname === '/login';
 
-  const [settings, socialLinks] = await Promise.all([
+  const [settings, aboutContent] = await Promise.all([
     getSettings(),
-    getSocialLinks()
+    getAboutContent()
   ]);
+  
+  // Temporarily providing empty social links to prevent site crash due to database RLS policy issue.
+  const socialLinks: SocialLink[] = [];
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -78,7 +82,7 @@ export default async function RootLayout({
                 <div className="relative flex min-h-screen flex-col">
                   <Header socialLinks={socialLinks} />
                   <main className="flex-1">{children}</main>
-                  <Footer socialLinks={socialLinks} />
+                  <Footer socialLinks={socialLinks} aboutContent={aboutContent} />
                 </div>
               </AdminShortcut>
             )}
