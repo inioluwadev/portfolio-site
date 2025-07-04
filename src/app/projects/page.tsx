@@ -3,6 +3,12 @@ import { getProjects } from '@/lib/data';
 import ProjectCard from '@/components/ProjectCard';
 import { cn } from '@/lib/utils';
 import type { Project } from '@/lib/types';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Projects',
+  description: 'A curated selection of my work, showcasing a commitment to pushing the boundaries of form and function.',
+};
 
 const projectCategories = ['All', 'Architecture', 'Design', 'Innovation'];
 

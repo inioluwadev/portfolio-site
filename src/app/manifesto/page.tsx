@@ -1,5 +1,11 @@
 import { Separator } from '@/components/ui/separator';
 import { getManifestoCoreBelief, getManifestoPrinciples } from '@/lib/data';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Manifesto',
+  description: 'The guiding principles that shape my work and philosophy.',
+};
 
 export default async function ManifestoPage() {
   const [coreBelief, principles] = await Promise.all([

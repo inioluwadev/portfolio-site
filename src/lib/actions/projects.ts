@@ -46,7 +46,16 @@ async function processProjectFormData(formData: FormData, supabase: SupabaseClie
     finalMainImageUrl = await uploadFile(mainImageFile, supabase);
   }
 
-  // 2. Handle detail images
+  // 2. Handle OG image
+  const ogImageFile = formData.get('og_image_url') as File | null;
+  const ogImageOriginalUrl = formData.get('og_image_url_original_url') as string | null;
+
+  let finalOgImageUrl: string | null = ogImageOriginalUrl || null;
+  if (ogImageFile && ogImageFile.size > 0) {
+    finalOgImageUrl = await uploadFile(ogImageFile, supabase);
+  }
+
+  // 3. Handle detail images
   for (let i = 0; i < parsedDetails.length; i++) {
     const detail = parsedDetails[i];
     if (detail.type === 'image') {
@@ -67,7 +76,7 @@ async function processProjectFormData(formData: FormData, supabase: SupabaseClie
     return d.type !== 'image' || (d.type === 'image' && d.content);
   });
   
-  // 3. Handle tags string
+  // 4. Handle tags string
   const tagsString = (values.tags as string) || '';
   const tagsArray = tagsString.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
 
@@ -79,22 +88,22 @@ async function processProjectFormData(formData: FormData, supabase: SupabaseClie
     image_url: finalMainImageUrl,
     details: finalDetails,
     year: values.year,
-    tags: tagsArray, // Note: passing array to schema, but schema expects string. Correcting this.
+    tags: tagsArray,
     is_featured: values.is_featured === 'on',
+    seo_title: values.seo_title,
+    meta_description: values.meta_description,
+    og_image_url: finalOgImageUrl,
   };
 
-  // The schema expects a string for tags, so we pass the original string
   const validatedWithFormTypes = projectSchema.safeParse({
     ...dataToValidate,
-    tags: tagsString, // Pass the original string for validation
+    tags: tagsString,
   });
 
   if (!validatedWithFormTypes.success) {
-    // Return validation errors
     return validatedWithFormTypes;
   }
   
-  // Return the validated data, but with tags as an array for the database
   return {
     ...validatedWithFormTypes,
     data: {
@@ -176,9 +185,8 @@ export async function toggleProjectFeatured(id: string, currentState: boolean) {
 
   if (error) {
     console.error("Error toggling project featured status:", error);
-    // Consider returning an error object that can be handled by the client
   }
 
   revalidatePath('/admin/projects');
-  revalidatePath('/projects'); // Revalidate if you have a "featured" section
+  revalidatePath('/projects');
 }

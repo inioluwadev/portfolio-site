@@ -135,7 +135,7 @@ export async function getProjectById(id: string): Promise<Project | null> {
 
 export async function getProjectBySlug(slug: string): Promise<Project | null> {
     const supabase = createClient();
-    const { data, error } = await supabase.from('projects').select('*').eq('slug', slug).single();
+    const { data, error } = await supabase.from('projects').select('*, seo_title, meta_description, og_image_url').eq('slug', slug).single();
     if (error) {
       console.error('Error fetching project by slug:', error);
       return null;

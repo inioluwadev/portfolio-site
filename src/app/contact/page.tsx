@@ -1,5 +1,11 @@
 import ContactForm from '@/components/ContactForm';
 import SocialLinks from '@/components/layout/SocialLinks';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Contact',
+  description: 'Have a project in mind, a question, or just want to connect? I\'d love to hear from you.',
+};
 
 export default function ContactPage() {
   return (

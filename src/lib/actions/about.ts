@@ -47,6 +47,9 @@ export async function updateAboutContent(prevState: any, formData: FormData): Pr
     const faviconFile = formData.get('favicon_url') as File | null;
     const originalFaviconUrl = formData.get('favicon_url_original_url') as string | null;
 
+    const ogImageFile = formData.get('og_image_url') as File | null;
+    const originalOgImageUrl = formData.get('og_image_url_original_url') as string | null;
+
     let finalImageUrl: string | null = originalImageUrl || null;
     if (imageFile && imageFile.size > 0) {
       finalImageUrl = await uploadFile(imageFile, supabase, 'images');
@@ -62,6 +65,11 @@ export async function updateAboutContent(prevState: any, formData: FormData): Pr
       finalFaviconUrl = await uploadFile(faviconFile, supabase, 'images');
     }
 
+    let finalOgImageUrl: string | null = originalOgImageUrl || null;
+    if (ogImageFile && ogImageFile.size > 0) {
+      finalOgImageUrl = await uploadFile(ogImageFile, supabase, 'images');
+    }
+
     const dataToValidate = {
       headline: values.headline,
       paragraph1: values.paragraph1,
@@ -71,6 +79,9 @@ export async function updateAboutContent(prevState: any, formData: FormData): Pr
       rss_url: values.rss_url,
       image_url: finalImageUrl,
       favicon_url: finalFaviconUrl,
+      seo_title: values.seo_title,
+      meta_description: values.meta_description,
+      og_image_url: finalOgImageUrl,
     };
     
     const validatedData = aboutContentSchema.safeParse(dataToValidate);

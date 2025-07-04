@@ -17,6 +17,9 @@ export const projectSchema = z.object({
   tags: z.string().optional(), // Form will use a string, action will convert to array
   year: z.coerce.number().optional().nullable(),
   is_featured: z.boolean().optional().default(false),
+  seo_title: z.string().optional().nullable(),
+  meta_description: z.string().optional().nullable(),
+  og_image_url: z.string().url().optional().nullable(),
 });
 
 export type Project = z.infer<typeof projectSchema> & {
@@ -33,6 +36,9 @@ export const aboutContentSchema = z.object({
   substack_url: z.string().url({ message: "Must be a valid Substack URL." }),
   rss_url: z.string().url({ message: "Must be a valid RSS Feed URL." }),
   favicon_url: z.string().url().optional().nullable(),
+  seo_title: z.string().optional().nullable(),
+  meta_description: z.string().optional().nullable(),
+  og_image_url: z.string().url().optional().nullable(),
 });
 
 export type AboutContent = z.infer<typeof aboutContentSchema>;
@@ -57,6 +63,10 @@ export const blogPostSchema = z.object({
   pub_date: z.string(),
   preview: z.string(),
   tags: z.array(z.string()),
+  slug: z.string().optional().nullable(),
+  seo_title: z.string().optional().nullable(),
+  meta_description: z.string().optional().nullable(),
+  og_image_url: z.string().url().optional().nullable(),
 });
 
 export type BlogPost = z.infer<typeof blogPostSchema>;

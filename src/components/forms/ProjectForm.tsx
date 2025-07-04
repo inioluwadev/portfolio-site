@@ -9,7 +9,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Trash2, PlusCircle, Save } from 'lucide-react';
 import { useFormState, useFormStatus } from 'react-dom';
 import { useToast } from '@/hooks/use-toast';
@@ -17,6 +17,7 @@ import { useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { ImageUpload } from '../ui/ImageUpload';
 import { Switch } from '@/components/ui/switch';
+import { Separator } from '../ui/separator';
 
 function SubmitButton({ isEditing }: { isEditing: boolean }) {
   const { pending } = useFormStatus();
@@ -57,6 +58,9 @@ export function ProjectForm({ project, formAction }: ProjectFormProps) {
       tags: '',
       year: new Date().getFullYear(),
       is_featured: false,
+      seo_title: '',
+      meta_description: '',
+      og_image_url: null,
     },
   });
 
@@ -285,6 +289,57 @@ export function ProjectForm({ project, formAction }: ProjectFormProps) {
               <Button type="button" variant="outline" onClick={() => addDetail('image')}><PlusCircle className="mr-2" /> Add Image</Button>
               <Button type="button" variant="outline" onClick={() => addDetail('quote')}><PlusCircle className="mr-2" /> Add Quote</Button>
             </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>SEO Settings</CardTitle>
+            <CardDescription>Configure Search Engine Optimization settings for this project page.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <FormField
+              control={form.control}
+              name="seo_title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>SEO Title</FormLabel>
+                  <FormControl>
+                    <Input {...field} value={field.value ?? ''} placeholder="A specific title for search engine results." />
+                  </FormControl>
+                  <FormDescription>If empty, the project title will be used.</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="meta_description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Meta Description</FormLabel>
+                  <FormControl>
+                    <Textarea {...field} value={field.value ?? ''} placeholder="A short description for search engines (about 160 characters)." />
+                  </FormControl>
+                  <FormDescription>If empty, the project's short description will be used.</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="og_image_url"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Open Graph Image</FormLabel>
+                  <FormControl>
+                    <ImageUpload name="og_image_url" defaultValue={field.value} />
+                  </FormControl>
+                  <FormDescription>The image used when sharing on social media. If empty, the project's main image will be used. (1200x630px recommended)</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </CardContent>
         </Card>
         

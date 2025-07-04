@@ -9,6 +9,43 @@ import AdminShortcut from '@/components/AdminShortcut';
 import './globals.css';
 import { getSocialLinks, getAboutContent, getSettings } from '@/lib/data';
 import type { SocialLink } from '@/lib/types';
+import type { Metadata } from 'next';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSettings();
+  const aboutContent = await getAboutContent();
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || '';
+
+  const siteTitle = settings?.site_title || "Inioluwa's Digital Atelier";
+  const description = aboutContent?.meta_description || aboutContent?.paragraph1 || "A creative visionary blending architecture, design, and innovation.";
+  const ogImage = aboutContent?.og_image_url || aboutContent?.image_url;
+
+  return {
+    metadataBase: new URL(siteUrl),
+    title: {
+      default: siteTitle,
+      template: `%s | ${siteTitle}`,
+    },
+    description: description,
+    openGraph: {
+      title: siteTitle,
+      description: description,
+      url: siteUrl,
+      siteName: siteTitle,
+      images: ogImage ? [ogImage] : [],
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: siteTitle,
+      description: description,
+      images: ogImage ? [ogImage] : [],
+    },
+    icons: {
+      icon: aboutContent?.favicon_url || '/favicon.ico',
+    },
+  };
+}
 
 export default async function RootLayout({
   children,
@@ -27,16 +64,9 @@ export default async function RootLayout({
     getSettings()
   ]);
 
-  const siteTitle = settings?.site_title || "Inioluwa's Digital Atelier";
-
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <title>{siteTitle}</title>
-        <meta name="description" content="A creative visionary blending architecture, design, and innovation." />
-        {aboutContent?.favicon_url && (
-          <link rel="icon" href={aboutContent.favicon_url} sizes="any" />
-        )}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Belleza&family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
