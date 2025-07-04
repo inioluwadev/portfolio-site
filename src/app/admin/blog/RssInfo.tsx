@@ -1,4 +1,4 @@
-import { getAboutContent } from '@/lib/actions/about';
+import { getAboutContent } from '@/lib/data';
 import Link from 'next/link';
 
 export async function RssInfo() {

@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
-import { getBlogPosts } from '@/lib/actions/blog';
+import { getBlogPosts } from '@/lib/data';
 
 export default async function BlogPage() {
   const posts = await getBlogPosts();

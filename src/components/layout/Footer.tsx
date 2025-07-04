@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { navLinks } from '@/lib/data';
 import SocialLinks from './SocialLinks';
 import NewsletterForm from '../NewsletterForm';
-import { getAboutContent } from '@/lib/actions/about';
+import { getAboutContent } from '@/lib/data';
 
 export default async function Footer() {
   const aboutContent = await getAboutContent();

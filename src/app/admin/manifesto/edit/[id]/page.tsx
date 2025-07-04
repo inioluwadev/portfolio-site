@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ManifestoPrincipleForm } from '@/components/forms/ManifestoPrincipleForm';
-import { getManifestoPrincipleById, updateManifestoPrinciple } from '@/lib/actions/manifesto';
+import { updateManifestoPrinciple } from '@/lib/actions/manifesto';
+import { getManifestoPrincipleById } from '@/lib/data';
 import { notFound } from 'next/navigation';
 
 export default async function EditManifestoPrinciplePage({ params }: { params: { id: string } }) {

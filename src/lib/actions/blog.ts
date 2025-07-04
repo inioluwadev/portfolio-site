@@ -1,37 +1,13 @@
-import { createClient } from '@/lib/supabase/server';
+'use server';
+
+import { createActionClient } from '@/lib/supabase/actions';
 import { revalidatePath } from 'next/cache';
 import Parser from 'rss-parser';
-import type { BlogPost } from '@/lib/types';
-import { getAboutContent } from './about';
+import { getAboutContent } from '@/lib/data';
 
 const parser = new Parser();
 
-export async function getBlogPosts(): Promise<BlogPost[]> {
-  const supabase = createClient();
-  const { data, error } = await supabase
-    .from('blog_posts')
-    .select('*')
-    .order('pub_date', { ascending: false });
-
-  if (error) {
-    console.error('Error fetching blog posts:', error);
-    return [];
-  }
-  // Format date for display
-  return data.map(post => ({
-    ...post,
-    pub_date: new Date(post.pub_date).toLocaleDateString('en-US', { 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
-    })
-  }));
-}
-
 export async function syncBlogPosts() {
-  'use server';
-
-  const supabase = createClient();
   const aboutContent = await getAboutContent();
   const RSS_URL = aboutContent?.rss_url;
 
@@ -48,7 +24,6 @@ export async function syncBlogPosts() {
 
     const postsToUpsert = feed.items
       .map(item => {
-        // A post must have a guid, title, link, and publication date to be valid.
         if (!item.guid || !item.title || !item.link || !item.pubDate) {
           console.warn('Skipping invalid RSS item:', item);
           return null;
@@ -67,7 +42,8 @@ export async function syncBlogPosts() {
     if (postsToUpsert.length === 0) {
       return { success: true, message: 'Blog is already up-to-date or no valid posts were found in the feed.' };
     }
-
+    
+    const supabase = createActionClient();
     const { error } = await supabase.from('blog_posts').upsert(postsToUpsert, { onConflict: 'guid' });
 
     if (error) {

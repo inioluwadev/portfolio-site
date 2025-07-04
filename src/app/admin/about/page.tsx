@@ -1,5 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getAboutContent, updateAboutContent } from "@/lib/actions/about";
+import { getAboutContent } from "@/lib/data";
+import { updateAboutContent } from "@/lib/actions/about";
 import { AboutForm } from "@/components/forms/AboutForm";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Terminal } from "lucide-react";

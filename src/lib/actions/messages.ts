@@ -1,7 +1,8 @@
-import { createClient } from '@/lib/supabase/server';
+'use server';
+
+import { createActionClient } from '@/lib/supabase/actions';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
-import type { ContactMessage } from '@/lib/types';
 
 const contactFormSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
@@ -10,9 +11,7 @@ const contactFormSchema = z.object({
 });
 
 export async function createContactMessage(prevState: any, formData: FormData) {
-  'use server';
-
-  const supabase = createClient();
+  const supabase = createActionClient();
   const values = Object.fromEntries(formData.entries());
   const validatedData = contactFormSchema.safeParse(values);
 
@@ -30,25 +29,8 @@ export async function createContactMessage(prevState: any, formData: FormData) {
   return { success: true };
 }
 
-
-export async function getContactMessages(): Promise<ContactMessage[]> {
-  const supabase = createClient();
-  const { data, error } = await supabase
-    .from('contact_messages')
-    .select('*')
-    .order('created_at', { ascending: false });
-
-  if (error) {
-    console.error('Error fetching messages:', error);
-    return [];
-  }
-  return data || [];
-}
-
 export async function deleteContactMessage(id: string) {
-  'use server';
-
-  const supabase = createClient();
+  const supabase = createActionClient();
   const { error } = await supabase.from('contact_messages').delete().eq('id', id);
 
   if (error) {

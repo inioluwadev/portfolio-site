@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ProjectForm } from '@/components/forms/ProjectForm';
-import { getProjectById, updateProject } from '@/lib/actions/projects';
+import { updateProject } from '@/lib/actions/projects';
+import { getProjectById } from '@/lib/data';
 import { notFound } from 'next/navigation';
 
 export default async function EditProjectPage({ params }: { params: { id: string } }) {

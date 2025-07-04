@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { getContactMessages, deleteContactMessage } from "@/lib/actions/messages";
+import { deleteContactMessage } from "@/lib/actions/messages";
+import { getContactMessages } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 

@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
-import { getProjects, getProjectBySlug } from '@/lib/actions/projects';
+import { getProjects, getProjectBySlug } from '@/lib/data';
 
 type ProjectDetailPageProps = {
   params: {

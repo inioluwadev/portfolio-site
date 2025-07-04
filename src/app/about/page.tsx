@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Download, Terminal } from 'lucide-react';
 import SocialLinks from '@/components/layout/SocialLinks';
 import { Card, CardContent } from '@/components/ui/card';
-import { getAboutContent } from '@/lib/actions/about';
+import { getAboutContent } from '@/lib/data';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 export default async function AboutPage() {

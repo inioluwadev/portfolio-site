@@ -1,5 +1,5 @@
 import { Separator } from '@/components/ui/separator';
-import { getManifestoCoreBelief, getManifestoPrinciples } from '@/lib/actions/manifesto';
+import { getManifestoCoreBelief, getManifestoPrinciples } from '@/lib/data';
 
 export default async function ManifestoPage() {
   const [coreBelief, principles] = await Promise.all([
