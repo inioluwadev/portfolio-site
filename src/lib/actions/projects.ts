@@ -7,8 +7,10 @@ import { redirect } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
-async function uploadFile(file: File, supabase: SupabaseClient): Promise<string | null> {
-  if (!file || file.size === 0) return null;
+async function uploadFile(file: File, supabase: SupabaseClient): Promise<string> {
+  if (!file || file.size === 0) {
+    throw new Error('Cannot upload an empty file.');
+  }
   const bucket = 'images';
   const fileName = `${uuidv4()}-${file.name}`;
   const { data, error } = await supabase.storage.from(bucket).upload(fileName, file);
@@ -18,8 +20,17 @@ async function uploadFile(file: File, supabase: SupabaseClient): Promise<string 
     throw new Error(`Failed to upload file: ${error.message}`);
   }
 
-  const { data: { publicUrl } } = supabase.storage.from(bucket).getPublicUrl(data.path);
-  return publicUrl;
+  if (!data?.path) {
+    throw new Error(`Upload to ${bucket} succeeded but did not return a path.`);
+  }
+
+  const { data: urlData } = supabase.storage.from(bucket).getPublicUrl(data.path);
+
+  if (!urlData?.publicUrl) {
+      throw new Error(`Could not get public URL for the uploaded file in ${bucket}. The file may have been uploaded, but it is not accessible.`);
+  }
+
+  return urlData.publicUrl;
 }
 
 async function processProjectFormData(formData: FormData, supabase: SupabaseClient) {
@@ -29,12 +40,10 @@ async function processProjectFormData(formData: FormData, supabase: SupabaseClie
   // 1. Handle main image
   const mainImageFile = formData.get('image_url') as File | null;
   const mainImageOriginalUrl = formData.get('image_url_original_url') as string | null;
-  let finalMainImageUrl: string | null = null;
   
+  let finalMainImageUrl: string | null = mainImageOriginalUrl || null;
   if (mainImageFile && mainImageFile.size > 0) {
     finalMainImageUrl = await uploadFile(mainImageFile, supabase);
-  } else if (mainImageOriginalUrl) {
-    finalMainImageUrl = mainImageOriginalUrl;
   }
 
   // 2. Handle detail images
@@ -44,13 +53,12 @@ async function processProjectFormData(formData: FormData, supabase: SupabaseClie
       const detailImageFile = formData.get(`details_image_${i}`) as File | null;
       const originalDetailUrl = formData.get(`details_image_${i}_original_url`) as string | null;
 
+      let finalDetailUrl: string | null = originalDetailUrl || null;
       if (detailImageFile && detailImageFile.size > 0) {
-        detail.content = await uploadFile(detailImageFile, supabase) || '';
-      } else if (originalDetailUrl) {
-        detail.content = originalDetailUrl;
-      } else {
-        detail.content = ''; // Image was removed
+          finalDetailUrl = await uploadFile(detailImageFile, supabase);
       }
+      
+      detail.content = finalDetailUrl || ''; // Assign the final URL, or an empty string if it was removed
     }
   }
 
