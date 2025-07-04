@@ -7,7 +7,13 @@ import Parser from 'rss-parser';
 import { getAboutContent } from '@/lib/data';
 import type { BlogPost } from '@/lib/types';
 
-const parser = new Parser();
+// Configure the parser to be less strict to handle variations in feed formats.
+const parser = new Parser({
+  xml2js: {
+    strict: false,
+    trim: true,
+  }
+});
 
 function generatePreview(content: string, length = 200): string {
     if (!content) return '';
