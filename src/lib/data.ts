@@ -1,37 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
 import type { AboutContent, BlogPost, ContactMessage, ManifestoCoreBelief, ManifestoPrinciple, Project } from '@/lib/types';
-import { Linkedin, Instagram, Twitter, Send, BookOpen, AtSign, type LucideIcon } from 'lucide-react';
-
-type NavLink = {
-  href: string;
-  label: string;
-};
-
-export const navLinks: NavLink[] = [
-  { href: '/', label: 'Home' },
-  { href: '/about', label: 'About' },
-  { href: '/projects', label: 'Projects' },
-  { href: '/manifesto', label: 'Manifesto' },
-  { href: '/blog', label: 'Blog' },
-  { href: '/contact', label: 'Contact' },
-];
-
-type SocialLink = {
-  name: string;
-  url: string;
-  icon: LucideIcon;
-};
-
-const substackUrl = 'https://inioluwa.substack.com';
-
-export const socialLinks: SocialLink[] = [
-  { name: 'LinkedIn', url: 'https://linkedin.com', icon: Linkedin },
-  { name: 'Instagram', url: 'https://instagram.com', icon: Instagram },
-  { name: 'Twitter (X)', url: 'https://x.com', icon: Twitter },
-  { name: 'Threads', url: 'https://threads.net', icon: Send },
-  { name: 'Substack', url: substackUrl, icon: BookOpen },
-  { name: 'Mastodon', url: 'https://mastodon.social', icon: AtSign },
-];
 
 // --- Data Fetching Functions ---
 

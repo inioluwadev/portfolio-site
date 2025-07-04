@@ -2,9 +2,12 @@ import { type NextRequest, NextResponse } from 'next/server';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 
 export async function middleware(request: NextRequest) {
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set('x-next-pathname', request.nextUrl.pathname);
+
   let response = NextResponse.next({
     request: {
-      headers: request.headers,
+      headers: requestHeaders,
     },
   });
 
@@ -20,7 +23,7 @@ export async function middleware(request: NextRequest) {
           request.cookies.set({ name, value, ...options });
           response = NextResponse.next({
             request: {
-              headers: request.headers,
+              headers: requestHeaders,
             },
           });
           response.cookies.set({ name, value, ...options });
@@ -29,7 +32,7 @@ export async function middleware(request: NextRequest) {
           request.cookies.set({ name, value: '', ...options });
           response = NextResponse.next({
             request: {
-              headers: request.headers,
+              headers: requestHeaders,
             },
           });
           response.cookies.set({ name, value: '', ...options });

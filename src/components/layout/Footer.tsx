@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { navLinks } from '@/lib/data';
+import { navLinks } from '@/lib/config';
 import SocialLinks from './SocialLinks';
 import NewsletterForm from '../NewsletterForm';
 import { getAboutContent } from '@/lib/data';

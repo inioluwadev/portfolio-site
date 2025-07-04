@@ -6,7 +6,7 @@ import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 
 import { cn } from '@/lib/utils';
-import { navLinks, socialLinks } from '@/lib/data';
+import { navLinks } from '@/lib/config';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import {

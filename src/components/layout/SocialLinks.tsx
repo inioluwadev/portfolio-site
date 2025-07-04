@@ -1,4 +1,4 @@
-import { socialLinks } from "@/lib/data"
+import { socialLinks } from "@/lib/config"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"

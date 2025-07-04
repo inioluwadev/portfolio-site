@@ -1,6 +1,5 @@
-'use client';
 
-import { usePathname } from 'next/navigation';
+import { headers } from 'next/headers';
 import { cn } from '@/lib/utils';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import { Toaster } from '@/components/ui/toaster';
@@ -14,26 +13,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname();
+  const headersList = headers();
+  const pathname = headersList.get('x-next-pathname') || '';
+  
   const isAdminRoute = pathname.startsWith('/admin');
   const isLoginRoute = pathname === '/login';
-
-  const bodyContent = (
-    <>
-      {isLoginRoute || isAdminRoute ? (
-        <>{children}</>
-      ) : (
-        <AdminShortcut>
-          <div className="relative flex min-h-screen flex-col">
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
-        </AdminShortcut>
-      )}
-      <Toaster />
-    </>
-  );
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -46,7 +30,18 @@ export default function RootLayout({
       </head>
       <body className={cn('min-h-screen bg-background font-body antialiased')}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {bodyContent}
+            {isLoginRoute || isAdminRoute ? (
+              <>{children}</>
+            ) : (
+              <AdminShortcut>
+                <div className="relative flex min-h-screen flex-col">
+                  <Header />
+                  <main className="flex-1">{children}</main>
+                  <Footer />
+                </div>
+              </AdminShortcut>
+            )}
+            <Toaster />
         </ThemeProvider>
       </body>
     </html>
