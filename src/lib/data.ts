@@ -168,3 +168,43 @@ export async function getSocialLinkById(id: string): Promise<SocialLink | null> 
   }
   return data;
 }
+
+// --- Count Functions for Dashboard ---
+export async function getProjectsCount(): Promise<number> {
+  const supabase = createClient();
+  const { count, error } = await supabase
+    .from('projects')
+    .select('*', { count: 'exact', head: true });
+
+  if (error) {
+    console.error('Error fetching projects count:', error);
+    return 0;
+  }
+  return count || 0;
+}
+
+export async function getMessagesCount(): Promise<number> {
+  const supabase = createClient();
+  const { count, error } = await supabase
+    .from('contact_messages')
+    .select('*', { count: 'exact', head: true });
+
+  if (error) {
+    console.error('Error fetching messages count:', error);
+    return 0;
+  }
+  return count || 0;
+}
+
+export async function getBlogPostsCount(): Promise<number> {
+  const supabase = createClient();
+  const { count, error } = await supabase
+    .from('blog_posts')
+    .select('*', { count: 'exact', head: true });
+
+  if (error) {
+    console.error('Error fetching blog posts count:', error);
+    return 0;
+  }
+  return count || 0;
+}
