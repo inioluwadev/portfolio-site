@@ -1,10 +1,8 @@
-
 'use server';
 
 import { createActionClient } from '@/lib/supabase/actions';
 import { revalidatePath } from 'next/cache';
 import Parser from 'rss-parser';
-import { getAboutContent } from '@/lib/data';
 import type { BlogPost } from '@/lib/types';
 
 // Configure the parser to be less strict to handle variations in feed formats.
@@ -25,12 +23,8 @@ function generatePreview(content: string, length = 200): string {
 }
 
 export async function syncBlogPosts(prevState: any, formData: FormData) {
-  const aboutContent = await getAboutContent();
-  const RSS_URL = aboutContent?.rss_url;
-
-  if (!RSS_URL) {
-    return { error: 'RSS URL is not configured. Please set it in the Admin > About Page section.' };
-  }
+  // Using the specific feed URL provided by the user to ensure stability.
+  const RSS_URL = 'https://inioluwaoladipupo.substack.com/feed';
   
   console.log(`Fetching RSS feed from: ${RSS_URL}`);
   let feedText: string | undefined;
