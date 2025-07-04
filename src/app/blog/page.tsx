@@ -15,31 +15,38 @@ export default function BlogPage() {
       </div>
 
       <div className="space-y-8">
-        {blogPosts.map((post, index) => (
-          <div key={post.id} className="animate-fadeInUp" style={{ animationDelay: `${index * 100}ms`}}>
-            <Card className="group transition-shadow hover:shadow-lg">
-              <Link href={post.url} target="_blank" rel="noopener noreferrer" className="block p-6">
-                <CardHeader className="p-0">
-                  <CardTitle className="font-headline text-2xl group-hover:text-primary transition-colors">
-                    {post.title}
-                    <ArrowUpRight className="inline-block ml-2 h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </CardTitle>
-                  <CardDescription className="text-sm pt-2">{post.date}</CardDescription>
-                </CardHeader>
-                <CardContent className="p-0 mt-4">
-                  <p className="text-foreground/80">{post.preview}</p>
-                </CardContent>
-                <CardFooter className="p-0 mt-4">
-                  <div className="flex flex-wrap gap-2">
-                    {post.tags.map(tag => (
-                      <Badge key={tag} variant="secondary">{tag}</Badge>
-                    ))}
-                  </div>
-                </CardFooter>
-              </Link>
-            </Card>
+        {blogPosts.length > 0 ? (
+          blogPosts.map((post, index) => (
+            <div key={post.id} className="animate-fadeInUp" style={{ animationDelay: `${index * 100}ms`}}>
+              <Card className="group transition-shadow hover:shadow-lg">
+                <Link href={post.url} target="_blank" rel="noopener noreferrer" className="block p-6">
+                  <CardHeader className="p-0">
+                    <CardTitle className="font-headline text-2xl group-hover:text-primary transition-colors">
+                      {post.title}
+                      <ArrowUpRight className="inline-block ml-2 h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </CardTitle>
+                    <CardDescription className="text-sm pt-2">{post.date}</CardDescription>
+                  </CardHeader>
+                  <CardContent className="p-0 mt-4">
+                    <p className="text-foreground/80">{post.preview}</p>
+                  </CardContent>
+                  <CardFooter className="p-0 mt-4">
+                    <div className="flex flex-wrap gap-2">
+                      {post.tags.map(tag => (
+                        <Badge key={tag} variant="secondary">{tag}</Badge>
+                      ))}
+                    </div>
+                  </CardFooter>
+                </Link>
+              </Card>
+            </div>
+          ))
+        ) : (
+          <div className="text-center text-muted-foreground py-20 border-2 border-dashed rounded-lg">
+            <p className="font-medium">No blog posts yet.</p>
+            <p className="text-sm">New posts from your Substack feed will appear here once synced.</p>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );

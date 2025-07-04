@@ -13,28 +13,25 @@ export default function AboutPage() {
             <CardContent className="p-0">
               <Image
                 src="https://placehold.co/600x800.png"
-                alt="Inioluwa Oladipupo"
+                alt="Your Name"
                 width={600}
                 height={800}
                 className="object-cover"
-                data-ai-hint="man portrait"
+                data-ai-hint="portrait person"
               />
             </CardContent>
           </Card>
         </div>
         <div className="md:col-span-2">
           <h1 className="font-headline text-4xl md:text-5xl mb-6">
-            Blending Vision with Precision
+            Your Professional Headline
           </h1>
           <div className="prose prose-lg dark:prose-invert max-w-none text-foreground/80 space-y-6">
             <p>
-              I am Inioluwa Oladipupo, a creative visionary operating at the intersection of architecture, design, and technological innovation. My work is driven by a passion for crafting spaces and objects that are not only aesthetically compelling but also deeply functional and sustainable.
+             This is where you can introduce yourself. Talk about your passion, your skills, and what drives your creative or professional work. Let your personality shine through.
             </p>
             <p>
-              With a foundation in architectural principles and a constant curiosity for emerging technologies, I explore how computational design, smart materials, and user-centric strategies can create more responsive, efficient, and inspiring environments.
-            </p>
-            <p>
-              From parametric pavilions that dance with light to intelligent building systems that adapt to their surroundings, my portfolio is a testament to a single belief: that great design is a dialogue between human need and technological possibility. This digital atelier is a curated look into my process, projects, and philosophies.
+              You can elaborate on your background, your experience, and the philosophies that guide your approach. This is a great place to connect with your audience on a personal level.
             </p>
           </div>
           <div className="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-6">

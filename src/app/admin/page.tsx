@@ -4,9 +4,9 @@ import { BookCopy, ImageIcon, MessageSquare } from "lucide-react";
 export default function AdminDashboardPage() {
   // In a real app, you'd fetch stats from Supabase here.
   const stats = {
-    projects: 4,
-    messages: 12,
-    posts: 3,
+    projects: 0,
+    messages: 0,
+    posts: 0,
   };
 
   return (

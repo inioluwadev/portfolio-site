@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { projects, type Project } from '@/lib/data';
+import { projects } from '@/lib/data';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ProjectCard from '@/components/ProjectCard';
 
@@ -31,13 +31,20 @@ export default function ProjectsPage() {
         </TabsList>
 
         <TabsContent value={activeTab} className="w-full">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredProjects.map((project, index) => (
-               <div key={project.id} className="animate-fadeInUp" style={{ animationDelay: `${index * 100}ms`}}>
-                <ProjectCard project={project} />
-              </div>
-            ))}
-          </div>
+           {filteredProjects.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredProjects.map((project, index) => (
+                 <div key={project.id} className="animate-fadeInUp" style={{ animationDelay: `${index * 100}ms`}}>
+                  <ProjectCard project={project} />
+                </div>
+              ))}
+            </div>
+           ) : (
+             <div className="text-center text-muted-foreground py-20 border-2 border-dashed rounded-lg col-span-full">
+              <p className="font-medium">No projects yet.</p>
+              <p className="text-sm">Your new projects will appear here once you add them in the admin dashboard.</p>
+            </div>
+           )}
         </TabsContent>
       </Tabs>
     </div>
