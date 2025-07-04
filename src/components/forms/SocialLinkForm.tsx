@@ -14,12 +14,13 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Save } from 'lucide-react';
+import { Save, Terminal } from 'lucide-react';
 import { useFormStatus } from 'react-dom';
 import { useToast } from '@/hooks/use-toast';
-import { useActionState, useEffect } from 'react';
+import { useActionState, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { getIcon } from '@/lib/icons';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 
 function SubmitButton({ isEditing }: { isEditing: boolean }) {
   const { pending } = useFormStatus();
@@ -38,6 +39,7 @@ type SocialLinkFormProps = {
 
 export function SocialLinkForm({ link, formAction }: SocialLinkFormProps) {
   const [state, action] = useActionState(formAction, undefined);
+  const [formError, setFormError] = useState<string | null>(null);
   const { toast } = useToast();
   const isEditing = !!link;
 
@@ -53,21 +55,27 @@ export function SocialLinkForm({ link, formAction }: SocialLinkFormProps) {
 
   useEffect(() => {
     if (state?.error) {
-      const formError = state.error._form?.[0];
-      const errorMessage = formError || 'Please check the form for field-specific errors.';
-      toast({
-        variant: 'destructive',
-        title: `Failed to ${isEditing ? 'update' : 'create'} link`,
-        description: errorMessage,
-      });
+      const errorMessage = state.error._form?.[0] || Object.values(state.error).flat()[0] || 'An unknown error occurred. Please check the form for field-specific errors.';
+      setFormError(errorMessage);
+    } else {
+       setFormError(null);
     }
-  }, [state, toast, isEditing]);
+  }, [state]);
   
   const selectedIcon = form.watch('icon');
   const IconComponent = getIcon(selectedIcon);
 
   return (
     <Form {...form}>
+       {formError && (
+        <Alert variant="destructive" className="mb-6">
+            <Terminal className="h-4 w-4" />
+            <AlertTitle>Submission Failed</AlertTitle>
+            <AlertDescription>
+                {formError}
+            </AlertDescription>
+        </Alert>
+      )}
       <form action={action} className="space-y-8">
         <FormField
           control={form.control}
@@ -147,7 +155,6 @@ export function SocialLinkForm({ link, formAction }: SocialLinkFormProps) {
             <Link href="/admin/socials">Cancel</Link>
           </Button>
         </div>
-        {state?.error?._form && <p className="text-sm text-destructive">{state.error._form[0]}</p>}
       </form>
     </Form>
   );
