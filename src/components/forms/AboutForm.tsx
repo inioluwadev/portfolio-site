@@ -8,7 +8,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDes
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Save } from 'lucide-react';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useActionState, useFormStatus } from 'react-dom';
 import { useToast } from '@/hooks/use-toast';
 import { useEffect } from 'react';
 import { ImageUpload } from '@/components/ui/ImageUpload';
@@ -32,7 +32,7 @@ type AboutFormProps = {
 };
 
 export function AboutForm({ aboutContent, formAction }: AboutFormProps) {
-  const [state, action] = useFormState(formAction, undefined);
+  const [state, action] = useActionState(formAction, undefined);
   const { toast } = useToast();
 
   const form = useForm<AboutContent>({
@@ -150,19 +150,7 @@ export function AboutForm({ aboutContent, formAction }: AboutFormProps) {
               <FormControl>
                 <Input {...field} value={field.value ?? ''} placeholder="https://yourname.substack.com" />
               </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="rss_url"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Substack RSS Feed URL</FormLabel>
-              <FormControl>
-                <Input {...field} value={field.value ?? ''} placeholder="https://yourname.substack.com/feed" />
-              </FormControl>
+              <FormDescription>Your RSS feed will be automatically generated from this URL.</FormDescription>
               <FormMessage />
             </FormItem>
           )}

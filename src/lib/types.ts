@@ -34,7 +34,7 @@ export const aboutContentSchema = z.object({
   image_url: z.string({ required_error: "An image is required." }).url('A valid image URL is required.').min(1, 'An image is required.'),
   cv_url: z.string({ required_error: "A CV document is required." }).url('A valid CV URL is required.').min(1, 'A CV document is required.'),
   substack_url: z.string().url({ message: "Must be a valid Substack URL." }),
-  rss_url: z.string().url({ message: "Must be a valid RSS Feed URL." }),
+  rss_url: z.string().url({ message: "Must be a valid RSS Feed URL." }).optional().nullable(),
   favicon_url: z.string().url().optional().nullable(),
   seo_title: z.string().optional().nullable(),
   meta_description: z.string().optional().nullable(),
