@@ -20,3 +20,14 @@ export const projectSchema = z.object({
 
 export type Project = z.infer<typeof projectSchema>;
 export type ProjectDetail = z.infer<typeof projectDetailSchema>;
+
+export const aboutContentSchema = z.object({
+  headline: z.string().min(3, 'Headline must be at least 3 characters.'),
+  paragraph1: z.string().min(10, 'First paragraph is required.'),
+  paragraph2: z.string().min(10, 'Second paragraph is required.'),
+  image_url: z.string().url('Must be a valid URL.'),
+  image_hint: z.string().optional().nullable(),
+  cv_url: z.string().min(1, "CV URL cannot be empty."),
+});
+
+export type AboutContent = z.infer<typeof aboutContentSchema>;

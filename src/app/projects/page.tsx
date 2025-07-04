@@ -1,6 +1,5 @@
 import Link from 'next/link';
-import { getProjects } from '@/lib/data';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { getProjects } from '@/lib/actions/projects';
 import ProjectCard from '@/components/ProjectCard';
 import { cn } from '@/lib/utils';
 import type { Project } from '@/lib/types';
