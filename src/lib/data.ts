@@ -1,3 +1,4 @@
+
 import { createClient } from '@/lib/supabase/server';
 import type { AboutContent, BlogPost, ContactMessage, ManifestoCoreBelief, ManifestoPrinciple, Project, Settings, SocialLink } from '@/lib/types';
 
@@ -35,6 +36,11 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
     console.error('Error fetching blog posts:', error);
     return [];
   }
+  
+  if (!data) {
+    return [];
+  }
+
   return data.map(post => ({
     ...post,
     pub_date: new Date(post.pub_date).toLocaleDateString('en-US', { 
