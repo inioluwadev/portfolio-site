@@ -7,8 +7,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import AdminShortcut from '@/components/AdminShortcut';
 import './globals.css';
-import { getAboutContent, getSettings } from '@/lib/data';
-import type { SocialLink } from '@/lib/types';
+import { getAboutContent, getSettings, getSocialLinks } from '@/lib/data';
 import type { Metadata } from 'next';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -58,14 +57,11 @@ export default async function RootLayout({
   const isAdminRoute = pathname.startsWith('/admin');
   const isLoginRoute = pathname === '/login';
 
-  const [aboutContent, settings] = await Promise.all([
+  const [aboutContent, settings, socialLinks] = await Promise.all([
     getAboutContent(),
-    getSettings()
+    getSettings(),
+    getSocialLinks()
   ]);
-
-  // Social links are temporarily disabled to prevent data fetching errors from crashing the app.
-  // To re-enable, the root cause (likely missing .env.local variables or database RLS policies) must be fixed.
-  const socialLinks: SocialLink[] = [];
 
   return (
     <html lang="en" suppressHydrationWarning>
