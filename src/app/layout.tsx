@@ -7,7 +7,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import AdminShortcut from '@/components/AdminShortcut';
 import './globals.css';
-import { getSocialLinks, getAboutContent } from '@/lib/data';
+import { getSocialLinks, getAboutContent, getSettings } from '@/lib/data';
 import type { SocialLink } from '@/lib/types';
 
 export default async function RootLayout({
@@ -21,15 +21,18 @@ export default async function RootLayout({
   const isAdminRoute = pathname.startsWith('/admin');
   const isLoginRoute = pathname === '/login';
 
-  const [socialLinks, aboutContent] = await Promise.all([
+  const [socialLinks, aboutContent, settings] = await Promise.all([
     getSocialLinks(),
-    getAboutContent()
+    getAboutContent(),
+    getSettings()
   ]);
+
+  const siteTitle = settings?.site_title || "Inioluwa's Digital Atelier";
 
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <title>Inioluwa's Digital Atelier</title>
+        <title>{siteTitle}</title>
         <meta name="description" content="A creative visionary blending architecture, design, and innovation." />
         {aboutContent?.favicon_url && (
           <link rel="icon" href={aboutContent.favicon_url} sizes="any" />

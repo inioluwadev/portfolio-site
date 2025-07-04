@@ -71,6 +71,12 @@ export const contactMessageSchema = z.object({
 });
 export type ContactMessage = z.infer<typeof contactMessageSchema>;
 
+export const settingsSchema = z.object({
+  site_title: z.string().min(3, 'Site title must be at least 3 characters.'),
+  site_mode: z.enum(['live', 'coming_soon', 'maintenance']).default('live'),
+});
+export type Settings = z.infer<typeof settingsSchema>;
+
 export const availableIcons = [
   'linkedin',
   'instagram',

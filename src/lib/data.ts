@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
-import type { AboutContent, BlogPost, ContactMessage, ManifestoCoreBelief, ManifestoPrinciple, Project, SocialLink } from '@/lib/types';
+import type { AboutContent, BlogPost, ContactMessage, ManifestoCoreBelief, ManifestoPrinciple, Project, Settings, SocialLink } from '@/lib/types';
 
 // The standard supabase-js client is used for functions that run at build time (like generateStaticParams)
 // because they don't have access to the request cookies.
@@ -143,6 +143,25 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
     return data;
 }
 
+// Settings
+export async function getSettings(): Promise<Settings | null> {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from('settings')
+    .select('site_title, site_mode')
+    .eq('id', 1)
+    .single();
+
+  if (error) {
+    console.error('Error fetching settings:', error);
+    // Return default settings if none are found
+    return {
+      site_title: "Inioluwa's Digital Atelier",
+      site_mode: 'live',
+    };
+  }
+  return data;
+}
 
 // Social Links
 export async function getSocialLinks(): Promise<SocialLink[]> {

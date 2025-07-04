@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { logout } from '@/lib/actions/auth';
-import { LayoutDashboard, FileText, PenSquare, MessageSquare, LogOut, Image as ImageIcon, BookCopy, Link2 } from 'lucide-react';
+import { LayoutDashboard, FileText, PenSquare, MessageSquare, LogOut, Image as ImageIcon, BookCopy, Link2, Settings } from 'lucide-react';
 
 const adminNavLinks = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
@@ -15,6 +15,7 @@ const adminNavLinks = [
   { href: '/admin/blog', label: 'Blog Sync', icon: BookCopy },
   { href: '/admin/messages', label: 'Messages', icon: MessageSquare },
   { href: '/admin/socials', label: 'Social Links', icon: Link2 },
+  { href: '/admin/settings', label: 'Settings', icon: Settings },
 ];
 
 export default function AdminSidebar({ userEmail }: { userEmail?: string }) {
@@ -50,7 +51,7 @@ export default function AdminSidebar({ userEmail }: { userEmail?: string }) {
           {userEmail}
         </div>
         <form action={logout}>
-          <Button variant="outline" className="w-full justify-start gap-3">
+          <Button variant="outline" className="w-full justify-start gap-3 transition-colors hover:border-destructive hover:bg-destructive/10 hover:text-destructive">
             <LogOut className="h-4 w-4" />
             Logout
           </Button>
