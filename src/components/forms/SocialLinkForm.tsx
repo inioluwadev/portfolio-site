@@ -109,7 +109,7 @@ export function SocialLinkForm({ link, formAction }: SocialLinkFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Icon</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
                   <SelectTrigger>
                     <div className="flex items-center gap-2">
