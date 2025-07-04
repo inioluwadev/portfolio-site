@@ -23,10 +23,10 @@ export const aboutContentSchema = z.object({
   headline: z.string().min(3, 'Headline must be at least 3 characters.'),
   paragraph1: z.string().min(10, 'First paragraph is required.'),
   paragraph2: z.string().min(10, 'Second paragraph is required.'),
-  image_url: z.string().url('Must be a valid URL.').optional().nullable(),
+  image_url: z.string({ required_error: "An image is required." }).url('A valid image URL is required.').min(1, 'An image is required.'),
   cv_url: z.string().url({ message: "Must be a valid URL." }).optional().nullable(),
-  substack_url: z.string().url({ message: "Must be a valid Substack URL." }).optional().nullable(),
-  rss_url: z.string().url({ message: "Must be a valid RSS Feed URL." }).optional().nullable(),
+  substack_url: z.string().url({ message: "Must be a valid Substack URL." }),
+  rss_url: z.string().url({ message: "Must be a valid RSS Feed URL." }),
 });
 
 export type AboutContent = z.infer<typeof aboutContentSchema>;
