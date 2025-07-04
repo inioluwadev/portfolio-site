@@ -7,7 +7,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import AdminShortcut from '@/components/AdminShortcut';
 import './globals.css';
-import { getSocialLinks, getAboutContent, getSettings } from '@/lib/data';
+import { getAboutContent, getSettings } from '@/lib/data';
 import type { SocialLink } from '@/lib/types';
 import type { Metadata } from 'next';
 
@@ -58,11 +58,14 @@ export default async function RootLayout({
   const isAdminRoute = pathname.startsWith('/admin');
   const isLoginRoute = pathname === '/login';
 
-  const [socialLinks, aboutContent, settings] = await Promise.all([
-    getSocialLinks(),
+  const [aboutContent, settings] = await Promise.all([
     getAboutContent(),
     getSettings()
   ]);
+
+  // Social links are temporarily disabled to prevent data fetching errors from crashing the app.
+  // To re-enable, the root cause (likely missing .env.local variables or database RLS policies) must be fixed.
+  const socialLinks: SocialLink[] = [];
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -80,7 +83,7 @@ export default async function RootLayout({
                 <div className="relative flex min-h-screen flex-col">
                   <Header socialLinks={socialLinks} />
                   <main className="flex-1">{children}</main>
-                  <Footer />
+                  <Footer socialLinks={socialLinks} />
                 </div>
               </AdminShortcut>
             )}

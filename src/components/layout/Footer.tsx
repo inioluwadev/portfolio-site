@@ -2,12 +2,12 @@ import Link from 'next/link';
 import { navLinks } from '@/lib/config';
 import SocialLinks from './SocialLinks';
 import NewsletterForm from '../NewsletterForm';
-import { getAboutContent, getSocialLinks } from '@/lib/data';
+import { getAboutContent } from '@/lib/data';
+import type { SocialLink } from '@/lib/types';
 
-export default async function Footer() {
+export default async function Footer({ socialLinks }: { socialLinks: SocialLink[] }) {
   const aboutContent = await getAboutContent();
   const substackUrl = aboutContent?.substack_url || "";
-  const socialLinks = await getSocialLinks();
 
   return (
     <footer className="border-t border-border/40">
