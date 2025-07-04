@@ -110,7 +110,7 @@ export function SettingsForm({ settings, formAction }: SettingsFormProps) {
                 </RadioGroup>
               </FormControl>
               <FormDescription>
-                Note: Coming Soon & Maintenance modes are not yet implemented. This is a placeholder.
+                Select the current status of your public-facing website.
               </FormDescription>
               <FormMessage />
             </FormItem>

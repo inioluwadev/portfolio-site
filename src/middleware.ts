@@ -1,9 +1,11 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
+import { getSettings } from '@/lib/data';
 
 export async function middleware(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);
-  requestHeaders.set('x-next-pathname', request.nextUrl.pathname);
+  const pathname = request.nextUrl.pathname;
+  requestHeaders.set('x-next-pathname', pathname);
 
   let response = NextResponse.next({
     request: {
@@ -20,28 +22,56 @@ export async function middleware(request: NextRequest) {
           return request.cookies.get(name)?.value;
         },
         set(name: string, value: string, options: CookieOptions) {
-          request.cookies.set({ name, value, ...options });
-          response = NextResponse.next({
-            request: {
-              headers: requestHeaders,
-            },
-          });
-          response.cookies.set({ name, value, ...options });
+          try {
+            request.cookies.set({ name, value, ...options });
+            response = NextResponse.next({
+              request: {
+                headers: requestHeaders,
+              },
+            });
+            response.cookies.set({ name, value, ...options });
+          } catch (error) {
+            // Can be ignored if middleware is refreshing sessions
+          }
         },
         remove(name: string, options: CookieOptions) {
-          request.cookies.set({ name, value: '', ...options });
-          response = NextResponse.next({
-            request: {
-              headers: requestHeaders,
-            },
-          });
-          response.cookies.set({ name, value: '', ...options });
+          try {
+            request.cookies.set({ name, value: '', ...options });
+            response = NextResponse.next({
+              request: {
+                headers: requestHeaders,
+              },
+            });
+            response.cookies.set({ name, value: '', ...options });
+          } catch (error) {
+             // Can be ignored if middleware is refreshing sessions
+          }
         },
       },
     }
   );
 
-  await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
+  const settings = await getSettings();
+
+  const isAdminPath = pathname.startsWith('/admin') || pathname === '/login';
+  const isMaintenancePath = pathname === '/maintenance';
+  const isComingSoonPath = pathname === '/coming-soon';
+
+  // If user is an admin, let them through to any page.
+  if (user && user.role === 'authenticated') {
+    return response;
+  }
+
+  // Handle Maintenance Mode
+  if (settings?.site_mode === 'maintenance' && !isMaintenancePath && !isAdminPath) {
+    return NextResponse.redirect(new URL('/maintenance', request.url));
+  }
+  
+  // Handle Coming Soon Mode
+  if (settings?.site_mode === 'coming_soon' && !isComingSoonPath && !isAdminPath) {
+    return NextResponse.redirect(new URL('/coming-soon', request.url));
+  }
 
   return response;
 }
