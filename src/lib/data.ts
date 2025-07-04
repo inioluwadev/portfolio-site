@@ -18,7 +18,7 @@ export async function getAboutContent(): Promise<AboutContent | null> {
     .single();
 
   if (error) {
-    console.error('Error fetching about content:', error);
+    console.error('Error fetching about content:', error.message);
     return null;
   }
   return data;
@@ -33,7 +33,7 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
     .order('pub_date', { ascending: false });
 
   if (error) {
-    console.error('Error fetching blog posts:', error);
+    console.error('Error fetching blog posts:', error.message);
     return [];
   }
   
@@ -61,7 +61,7 @@ export async function getManifestoCoreBelief(): Promise<ManifestoCoreBelief | nu
     .single();
 
   if (error) {
-    console.error('Error fetching manifesto core belief:', error);
+    console.error('Error fetching manifesto core belief:', error.message);
     return null;
   }
   return data;
@@ -75,7 +75,7 @@ export async function getManifestoPrinciples(): Promise<ManifestoPrinciple[]> {
     .order('created_at', { ascending: true });
 
   if (error) {
-    console.error('Error fetching manifesto principles:', error);
+    console.error('Error fetching manifesto principles:', error.message);
     return [];
   }
   return data || [];
@@ -85,7 +85,7 @@ export async function getManifestoPrincipleById(id: string): Promise<ManifestoPr
   const supabase = createClient();
   const { data, error } = await supabase.from('manifesto_principles').select('*').eq('id', id).single();
   if (error) {
-    console.error('Error fetching principle by ID:', error);
+    console.error('Error fetching principle by ID:', error.message);
     return null;
   }
   return data;
@@ -100,7 +100,7 @@ export async function getContactMessages(): Promise<ContactMessage[]> {
     .order('created_at', { ascending: false });
 
   if (error) {
-    console.error('Error fetching messages:', error);
+    console.error('Error fetching messages:', error.message);
     return [];
   }
   return data || [];
@@ -123,7 +123,7 @@ export async function getProjects(filters?: { category?: string }): Promise<Proj
   const { data, error } = await query;
 
   if (error) {
-    console.error('Error fetching projects:', error);
+    console.error('Error fetching projects:', error.message);
     return [];
   }
   return data || [];
@@ -133,7 +133,7 @@ export async function getProjectById(id: string): Promise<Project | null> {
   const supabase = createClient();
   const { data, error } = await supabase.from('projects').select('*').eq('id', id).single();
   if (error) {
-    console.error('Error fetching project by ID:', error);
+    console.error('Error fetching project by ID:', error.message);
     return null;
   }
   return data;
@@ -143,7 +143,7 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
     const supabase = createClient();
     const { data, error } = await supabase.from('projects').select('*, seo_title, meta_description, og_image_url').eq('slug', slug).single();
     if (error) {
-      console.error('Error fetching project by slug:', error);
+      console.error('Error fetching project by slug:', error.message);
       return null;
     }
     return data;
@@ -159,7 +159,7 @@ export async function getSettings(): Promise<Settings | null> {
     .single();
 
   if (error) {
-    console.error('Error fetching settings:', error);
+    console.error('Error fetching settings:', error.message);
     // Return default settings if none are found
     return {
       site_title: "Inioluwa's Digital Atelier",
@@ -178,7 +178,7 @@ export async function getSocialLinks(): Promise<SocialLink[]> {
     .order('sort_order', { ascending: true });
 
   if (error) {
-    console.error('Error fetching social links:', error);
+    console.error('Error fetching social links:', error.message);
     return [];
   }
   return data || [];
@@ -188,7 +188,7 @@ export async function getSocialLinkById(id: string): Promise<SocialLink | null> 
   const supabase = createClient();
   const { data, error } = await supabase.from('social_links').select('*').eq('id', id).single();
   if (error) {
-    console.error('Error fetching social link by ID:', error);
+    console.error('Error fetching social link by ID:', error.message);
     return null;
   }
   return data;
@@ -202,7 +202,7 @@ export async function getProjectsCount(): Promise<number> {
     .select('*', { count: 'exact', head: true });
 
   if (error) {
-    console.error('Error fetching projects count:', error);
+    console.error('Error fetching projects count:', error.message);
     return 0;
   }
   return count || 0;
@@ -215,7 +215,7 @@ export async function getMessagesCount(): Promise<number> {
     .select('*', { count: 'exact', head: true });
 
   if (error) {
-    console.error('Error fetching messages count:', error);
+    console.error('Error fetching messages count:', error.message);
     return 0;
   }
   return count || 0;
@@ -228,7 +228,7 @@ export async function getBlogPostsCount(): Promise<number> {
     .select('*', { count: 'exact', head: true });
 
   if (error) {
-    console.error('Error fetching blog posts count:', error);
+    console.error('Error fetching blog posts count:', error.message);
     return 0;
   }
   return count || 0;
