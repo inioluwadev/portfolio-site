@@ -151,7 +151,7 @@ export async function getSocialLinks(): Promise<SocialLink[]> {
     .order('sort_order', { ascending: true });
 
   if (error) {
-    console.error(`Error fetching social links: ${error.message}. ${RLS_HINT}`);
+    console.error(`[DATABASE PERMISSION ERROR] Error fetching social links: ${error.message}. This is most likely because the 'social_links' table is missing a Row Level Security (RLS) policy for public access. Please run the required SQL script in your Supabase dashboard.`);
     return [];
   }
   return data || [];
