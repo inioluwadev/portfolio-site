@@ -11,6 +11,7 @@ const getAnonClient = () => createAnonClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
+const RLS_HINT = "This might be due to missing RLS policies. Please ensure public users have SELECT access on the corresponding table.";
 
 // --- Public Data Fetching Functions ---
 
@@ -24,7 +25,7 @@ export async function getAboutContent(): Promise<AboutContent | null> {
     .single();
 
   if (error) {
-    console.error('Error fetching about content:', error.message);
+    console.error(`Error fetching about content: ${error.message}. ${RLS_HINT}`);
     return null;
   }
   return data;
@@ -39,7 +40,7 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
     .order('pub_date', { ascending: false });
 
   if (error) {
-    console.error('Error fetching blog posts:', error.message);
+    console.error(`Error fetching blog posts: ${error.message}. ${RLS_HINT}`);
     return [];
   }
   
@@ -67,7 +68,7 @@ export async function getManifestoCoreBelief(): Promise<ManifestoCoreBelief | nu
     .single();
 
   if (error) {
-    console.error('Error fetching manifesto core belief:', error.message);
+    console.error(`Error fetching manifesto core belief: ${error.message}. ${RLS_HINT}`);
     return null;
   }
   return data;
@@ -81,7 +82,7 @@ export async function getManifestoPrinciples(): Promise<ManifestoPrinciple[]> {
     .order('created_at', { ascending: true });
 
   if (error) {
-    console.error('Error fetching manifesto principles:', error.message);
+    console.error(`Error fetching manifesto principles: ${error.message}. ${RLS_HINT}`);
     return [];
   }
   return data || [];
@@ -99,7 +100,7 @@ export async function getProjects(filters?: { category?: string }): Promise<Proj
   const { data, error } = await query;
 
   if (error) {
-    console.error('Error fetching projects:', error.message);
+    console.error(`Error fetching projects: ${error.message}. ${RLS_HINT}`);
     return [];
   }
   return data || [];
@@ -109,7 +110,7 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
     const supabase = getAnonClient();
     const { data, error } = await supabase.from('projects').select('*, seo_title, meta_description, og_image_url').eq('slug', slug).single();
     if (error) {
-      console.error('Error fetching project by slug:', error.message);
+      console.error(`Error fetching project by slug: ${error.message}. ${RLS_HINT}`);
       return null;
     }
     return data;
@@ -125,7 +126,7 @@ export async function getSettings(): Promise<Settings | null> {
     .single();
 
   if (error) {
-    console.error('Error fetching settings:', error.message);
+    console.error(`Error fetching settings: ${error.message}. ${RLS_HINT}`);
     // Return default settings if none are found
     return {
       site_title: "Inioluwa's Digital Atelier",
@@ -144,7 +145,7 @@ export async function getSocialLinks(): Promise<SocialLink[]> {
     .order('sort_order', { ascending: true });
 
   if (error) {
-    console.error('Error fetching social links:', error.message);
+    console.error(`Error fetching social links: ${error.message}. ${RLS_HINT}`);
     return [];
   }
   return data || [];
