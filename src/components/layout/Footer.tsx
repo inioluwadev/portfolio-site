@@ -2,11 +2,12 @@ import Link from 'next/link';
 import { navLinks } from '@/lib/config';
 import SocialLinks from './SocialLinks';
 import NewsletterForm from '../NewsletterForm';
-import { getAboutContent } from '@/lib/data';
+import { getAboutContent, getSocialLinks } from '@/lib/data';
 
 export default async function Footer() {
   const aboutContent = await getAboutContent();
   const substackUrl = aboutContent?.substack_url || "";
+  const socialLinks = await getSocialLinks();
 
   return (
     <footer className="border-t border-border/40">
@@ -33,7 +34,7 @@ export default async function Footer() {
           </div>
           <div>
             <h3 className="font-headline text-lg mb-4">Connect</h3>
-            <SocialLinks />
+            <SocialLinks links={socialLinks} />
           </div>
         </div>
         <div className="mt-12 pt-8 border-t border-border/40 flex flex-col md:flex-row justify-between items-center text-sm text-foreground/60">

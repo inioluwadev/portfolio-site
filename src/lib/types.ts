@@ -25,8 +25,8 @@ export const aboutContentSchema = z.object({
   paragraph2: z.string().min(10, 'Second paragraph is required.'),
   image_url: z.string().url('Must be a valid URL.').optional().nullable(),
   cv_url: z.string().url({ message: "Must be a valid URL." }).optional().nullable(),
-  substack_url: z.string().url({ message: "Must be a valid Substack URL." }),
-  rss_url: z.string().url({ message: "Must be a valid RSS Feed URL." }),
+  substack_url: z.string().url({ message: "Must be a valid Substack URL." }).optional().nullable(),
+  rss_url: z.string().url({ message: "Must be a valid RSS Feed URL." }).optional().nullable(),
 });
 
 export type AboutContent = z.infer<typeof aboutContentSchema>;
@@ -63,3 +63,25 @@ export const contactMessageSchema = z.object({
   message: z.string(),
 });
 export type ContactMessage = z.infer<typeof contactMessageSchema>;
+
+export const availableIcons = [
+  'linkedin',
+  'instagram',
+  'twitter',
+  'send',
+  'bookOpen',
+  'atSign',
+  'link',
+] as const;
+
+export const socialLinkSchema = z.object({
+  id: z.string().uuid().optional(),
+  created_at: z.string().optional(),
+  name: z.string().min(2, 'Name must be at least 2 characters.'),
+  url: z.string().url('Please enter a valid URL.'),
+  icon: z.enum(availableIcons, {
+    errorMap: () => ({ message: 'Please select a valid icon.' }),
+  }),
+  sort_order: z.coerce.number().int().default(0),
+});
+export type SocialLink = z.infer<typeof socialLinkSchema>;

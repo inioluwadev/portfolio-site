@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { logout } from '@/lib/actions/auth';
-import { LayoutDashboard, FileText, PenSquare, MessageSquare, LogOut, Image as ImageIcon, BookCopy } from 'lucide-react';
+import { LayoutDashboard, FileText, PenSquare, MessageSquare, LogOut, Image as ImageIcon, BookCopy, Link2 } from 'lucide-react';
 
 const adminNavLinks = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
@@ -14,6 +14,7 @@ const adminNavLinks = [
   { href: '/admin/manifesto', label: 'Manifesto', icon: PenSquare },
   { href: '/admin/blog', label: 'Blog Sync', icon: BookCopy },
   { href: '/admin/messages', label: 'Messages', icon: MessageSquare },
+  { href: '/admin/socials', label: 'Social Links', icon: Link2 },
 ];
 
 export default function AdminSidebar({ userEmail }: { userEmail?: string }) {
@@ -26,7 +27,7 @@ export default function AdminSidebar({ userEmail }: { userEmail?: string }) {
       </div>
       <nav className="flex-1 p-4 space-y-1">
         {adminNavLinks.map((link) => {
-          const isActive = pathname === link.href;
+          const isActive = pathname.startsWith(link.href) && (link.href !== '/admin' || pathname === '/admin');
           return (
             <Link
               key={link.href}

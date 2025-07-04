@@ -7,8 +7,10 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import AdminShortcut from '@/components/AdminShortcut';
 import './globals.css';
+import { getSocialLinks } from '@/lib/data';
+import type { SocialLink } from '@/lib/types';
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -18,6 +20,8 @@ export default function RootLayout({
   
   const isAdminRoute = pathname.startsWith('/admin');
   const isLoginRoute = pathname === '/login';
+
+  const socialLinks = await getSocialLinks();
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -35,7 +39,7 @@ export default function RootLayout({
             ) : (
               <AdminShortcut>
                 <div className="relative flex min-h-screen flex-col">
-                  <Header />
+                  <Header socialLinks={socialLinks} />
                   <main className="flex-1">{children}</main>
                   <Footer />
                 </div>

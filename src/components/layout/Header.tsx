@@ -17,8 +17,9 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import SocialLinks from './SocialLinks';
+import type { SocialLink as SocialLinkType } from '@/lib/types';
 
-export default function Header() {
+export default function Header({ socialLinks }: { socialLinks: SocialLinkType[] }) {
   const pathname = usePathname();
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -83,7 +84,7 @@ export default function Header() {
 
         <div className="flex flex-1 items-center justify-end space-x-2">
           <div className="hidden md:flex">
-            <SocialLinks />
+            <SocialLinks links={socialLinks} />
           </div>
           <ThemeToggle />
         </div>

@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
-import type { AboutContent, BlogPost, ContactMessage, ManifestoCoreBelief, ManifestoPrinciple, Project } from '@/lib/types';
+import type { AboutContent, BlogPost, ContactMessage, ManifestoCoreBelief, ManifestoPrinciple, Project, SocialLink } from '@/lib/types';
 
 // The standard supabase-js client is used for functions that run at build time (like generateStaticParams)
 // because they don't have access to the request cookies.
@@ -141,4 +141,30 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
       return null;
     }
     return data;
+}
+
+
+// Social Links
+export async function getSocialLinks(): Promise<SocialLink[]> {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from('social_links')
+    .select('*')
+    .order('sort_order', { ascending: true });
+
+  if (error) {
+    console.error('Error fetching social links:', error);
+    return [];
+  }
+  return data || [];
+}
+
+export async function getSocialLinkById(id: string): Promise<SocialLink | null> {
+  const supabase = createClient();
+  const { data, error } = await supabase.from('social_links').select('*').eq('id', id).single();
+  if (error) {
+    console.error('Error fetching social link by ID:', error);
+    return null;
+  }
+  return data;
 }

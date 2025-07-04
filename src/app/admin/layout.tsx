@@ -1,6 +1,8 @@
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import AdminSidebar from '@/components/layout/AdminSidebar';
+import { getSocialLinks } from '@/lib/data';
+import type { SocialLink } from '@/lib/types';
 
 export default async function AdminLayout({
   children,
