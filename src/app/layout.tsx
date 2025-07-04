@@ -60,10 +60,7 @@ export default async function RootLayout({
   const isAdminRoute = pathname.startsWith('/admin');
   const isLoginRoute = pathname === '/login';
 
-  const [socialLinks, aboutContent] = await Promise.all([
-    getSocialLinks(),
-    getAboutContent()
-  ]);
+  const socialLinks = await getSocialLinks();
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -81,7 +78,7 @@ export default async function RootLayout({
                 <div className="relative flex min-h-screen flex-col">
                   <Header socialLinks={socialLinks} />
                   <main className="flex-1">{children}</main>
-                  <Footer socialLinks={socialLinks} aboutContent={aboutContent} />
+                  <Footer socialLinks={socialLinks} />
                 </div>
               </AdminShortcut>
             )}

@@ -70,19 +70,11 @@ export async function updateAboutContent(prevState: any, formData: FormData): Pr
       finalOgImageUrl = await uploadFile(ogImageFile, supabase, 'images');
     }
 
-    const substackUrlValue = (values.substack_url as string || '').trim();
-    let rssUrlValue: string | null = null;
-    if (substackUrlValue) {
-      rssUrlValue = `${substackUrlValue.replace(/\/$/, '')}/feed`;
-    }
-
     const dataToValidate = {
       headline: values.headline,
       paragraph1: values.paragraph1,
       paragraph2: values.paragraph2,
       cv_url: finalCvUrl,
-      substack_url: substackUrlValue,
-      rss_url: rssUrlValue,
       image_url: finalImageUrl,
       favicon_url: finalFaviconUrl,
       seo_title: values.seo_title,
@@ -108,7 +100,6 @@ export async function updateAboutContent(prevState: any, formData: FormData): Pr
     revalidatePath('/about');
     revalidatePath('/admin/about');
     revalidatePath('/', 'layout'); // for footer and favicon
-    revalidatePath('/admin/blog'); // for blog sync RssInfo
     return { success: true };
   } catch (e: any) {
     return { error: { _form: [e.message] } };

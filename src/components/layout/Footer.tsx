@@ -1,23 +1,14 @@
 import Link from 'next/link';
 import { navLinks } from '@/lib/config';
 import SocialLinks from './SocialLinks';
-import NewsletterForm from '../NewsletterForm';
-import type { SocialLink, AboutContent } from '@/lib/types';
+import type { SocialLink } from '@/lib/types';
 
-export default function Footer({ socialLinks, aboutContent }: { socialLinks: SocialLink[], aboutContent: AboutContent | null }) {
-  const substackUrl = aboutContent?.substack_url || "";
+export default function Footer({ socialLinks }: { socialLinks: SocialLink[] }) {
 
   return (
     <footer className="border-t border-border/20 bg-background/50">
       <div className="container py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="md:col-span-2">
-            <h3 className="font-headline text-lg mb-4 text-gradient">Subscribe to my Substack</h3>
-            <p className="text-foreground/60 mb-4 text-sm">
-              Get insights on architecture, design, and innovation delivered to your inbox.
-            </p>
-            <NewsletterForm substackUrl={substackUrl} />
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
             <h3 className="font-headline text-lg mb-4">Navigate</h3>
             <ul className="space-y-2">

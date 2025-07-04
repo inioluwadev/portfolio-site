@@ -5,14 +5,13 @@ import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { logout } from '@/lib/actions/auth';
-import { LayoutDashboard, FileText, PenSquare, MessageSquare, LogOut, Image as ImageIcon, BookCopy, Link2, Settings } from 'lucide-react';
+import { LayoutDashboard, FileText, PenSquare, MessageSquare, LogOut, Image as ImageIcon, Link2, Settings } from 'lucide-react';
 
 const adminNavLinks = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/admin/projects', label: 'Projects', icon: ImageIcon },
   { href: '/admin/about', label: 'About Page', icon: FileText },
   { href: '/admin/manifesto', label: 'Manifesto', icon: PenSquare },
-  { href: '/admin/blog', label: 'Blog Sync', icon: BookCopy },
   { href: '/admin/messages', label: 'Messages', icon: MessageSquare },
   { href: '/admin/socials', label: 'Social Links', icon: Link2 },
   { href: '/admin/settings', label: 'Settings', icon: Settings },

@@ -1,6 +1,6 @@
 
 import { createClient } from '@/lib/supabase/server';
-import type { AboutContent, BlogPost, ContactMessage, ManifestoCoreBelief, ManifestoPrinciple, Project, Settings, SocialLink } from '@/lib/types';
+import type { AboutContent, ContactMessage, ManifestoCoreBelief, ManifestoPrinciple, Project, Settings, SocialLink } from '@/lib/types';
 
 // The standard supabase-js client is used for functions that run at build time or for public data
 // because they don't have access to the request cookies and should not depend on a user session.
@@ -35,33 +35,6 @@ export async function getAboutContent(): Promise<AboutContent | null> {
     return null;
   }
   return data;
-}
-
-// Blog
-export async function getBlogPosts(): Promise<BlogPost[]> {
-  const supabase = getAnonClient();
-  const { data, error } = await supabase
-    .from('blog_posts')
-    .select('*')
-    .order('pub_date', { ascending: false });
-
-  if (error) {
-    console.error(`Error fetching blog posts: ${error.message}. ${RLS_HINT}`);
-    return [];
-  }
-  
-  if (!data) {
-    return [];
-  }
-
-  return data.map(post => ({
-    ...post,
-    pub_date: new Date(post.pub_date).toLocaleDateString('en-US', { 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
-    })
-  }));
 }
 
 // Manifesto
@@ -227,19 +200,6 @@ export async function getMessagesCount(): Promise<number> {
 
   if (error) {
     console.error('Error fetching messages count:', error.message);
-    return 0;
-  }
-  return count || 0;
-}
-
-export async function getBlogPostsCount(): Promise<number> {
-  const supabase = createClient();
-  const { count, error } = await supabase
-    .from('blog_posts')
-    .select('*', { count: 'exact', head: true });
-
-  if (error) {
-    console.error('Error fetching blog posts count:', error.message);
     return 0;
   }
   return count || 0;

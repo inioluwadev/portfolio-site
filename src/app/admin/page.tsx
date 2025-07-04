@@ -3,13 +3,12 @@ import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
 import { BookCopy, ImageIcon, MessageSquare, PlusCircle, Edit, Eye } from "lucide-react";
-import { getProjectsCount, getMessagesCount, getBlogPostsCount } from '@/lib/data';
+import { getProjectsCount, getMessagesCount } from '@/lib/data';
 
 export default async function AdminDashboardPage() {
-  const [projectsCount, messagesCount, blogPostsCount] = await Promise.all([
+  const [projectsCount, messagesCount] = await Promise.all([
     getProjectsCount(),
     getMessagesCount(),
-    getBlogPostsCount(),
   ]);
 
   return (
@@ -56,18 +55,6 @@ export default async function AdminDashboardPage() {
             </p>
           </CardContent>
         </Card>
-        <Card className="glass-card">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Blog Posts</CardTitle>
-            <BookCopy className="h-4 w-4 text-primary" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{blogPostsCount}</div>
-            <p className="text-xs text-muted-foreground">
-              Synced from Substack
-            </p>
-          </CardContent>
-        </Card>
       </div>
       
        <div className="animate-fadeInUp animation-delay-400">
@@ -85,12 +72,12 @@ export default async function AdminDashboardPage() {
               </Link>
             </Button>
             <Button variant="outline" asChild className="justify-start p-6 text-left h-auto glow-border-hover">
-              <Link href="/admin/blog">
+              <Link href="/admin/manifesto">
                 <div className="flex items-center">
                   <BookCopy className="mr-4 h-6 w-6 text-primary" />
                   <div>
-                    <p className="font-semibold">Sync Blog Posts</p>
-                    <p className="text-sm text-muted-foreground">Update your feed from Substack.</p>
+                    <p className="font-semibold">Update Manifesto</p>
+                    <p className="text-sm text-muted-foreground">Edit your core principles.</p>
                   </div>
                 </div>
               </Link>

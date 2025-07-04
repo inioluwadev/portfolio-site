@@ -141,21 +141,7 @@ export function AboutForm({ aboutContent, formAction }: AboutFormProps) {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="substack_url"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Substack URL</FormLabel>
-              <FormControl>
-                <Input {...field} value={field.value ?? ''} placeholder="https://yourname.substack.com" />
-              </FormControl>
-              <FormDescription>Your RSS feed will be automatically generated from this URL.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
+        
         <Separator />
         
         <Card>

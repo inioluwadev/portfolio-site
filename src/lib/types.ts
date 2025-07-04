@@ -33,8 +33,6 @@ export const aboutContentSchema = z.object({
   paragraph2: z.string().min(10, 'Second paragraph is required.'),
   image_url: z.string({ required_error: "An image is required." }).url('A valid image URL is required.').min(1, 'An image is required.'),
   cv_url: z.string({ required_error: "A CV document is required." }).url('A valid CV URL is required.').min(1, 'A CV document is required.'),
-  substack_url: z.string().url({ message: "Must be a valid Substack URL." }),
-  rss_url: z.string().url({ message: "Must be a valid RSS Feed URL." }).optional().nullable(),
   favicon_url: z.string().url().optional().nullable(),
   seo_title: z.string().optional().nullable(),
   meta_description: z.string().optional().nullable(),
@@ -55,21 +53,6 @@ export const manifestoCoreBeliefSchema = z.object({
   core_belief: z.string().min(10, 'Core belief must be at least 10 characters.'),
 });
 export type ManifestoCoreBelief = z.infer<typeof manifestoCoreBeliefSchema>;
-
-export const blogPostSchema = z.object({
-  guid: z.string(),
-  title: z.string(),
-  link: z.string().url(),
-  pub_date: z.string(),
-  preview: z.string(),
-  tags: z.array(z.string()),
-  slug: z.string().optional().nullable(),
-  seo_title: z.string().optional().nullable(),
-  meta_description: z.string().optional().nullable(),
-  og_image_url: z.string().url().optional().nullable(),
-});
-
-export type BlogPost = z.infer<typeof blogPostSchema>;
 
 export const contactMessageSchema = z.object({
   id: z.string().uuid(),

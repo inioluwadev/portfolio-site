@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { navLinks } from '@/lib/config';
-import type { Project, BlogPost } from '@/lib/types';
+import type { Project } from '@/lib/types';
 import type { MetadataRoute } from 'next';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -36,18 +36,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  // Fetch Blog Posts
-  const { data: posts } = await supabase.from('blog_posts').select('link, pub_date');
-  const postUrls = (posts as BlogPost[] || []).map(post => ({
-    url: post.link, // External links to Substack
-    lastModified: new Date(post.pub_date).toISOString(),
-    changeFrequency: 'weekly' as const,
-    priority: 0.7,
-  }));
-
   return [
     ...staticRoutes,
     ...projectUrls,
-    ...postUrls,
   ];
 }
