@@ -44,10 +44,12 @@ export default function ContactForm() {
 
   useEffect(() => {
     if (state?.error) {
+        const formError = state.error._form?.[0];
+        const errorMessage = formError || 'Please check the form for field-specific errors.';
         toast({
             variant: 'destructive',
-            title: 'An error occurred',
-            description: 'Please check the form for errors.',
+            title: 'Failed to send message',
+            description: errorMessage,
         });
     }
     if (state?.success) {

@@ -53,13 +53,15 @@ export function SocialLinkForm({ link, formAction }: SocialLinkFormProps) {
 
   useEffect(() => {
     if (state?.error) {
+      const formError = state.error._form?.[0];
+      const errorMessage = formError || 'Please check the form for field-specific errors.';
       toast({
         variant: 'destructive',
-        title: 'An error occurred',
-        description: 'Please check the form for errors.',
+        title: `Failed to ${isEditing ? 'update' : 'create'} link`,
+        description: errorMessage,
       });
     }
-  }, [state, toast]);
+  }, [state, toast, isEditing]);
   
   const selectedIcon = form.watch('icon');
   const IconComponent = getIcon(selectedIcon);
