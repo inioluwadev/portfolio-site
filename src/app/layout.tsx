@@ -9,16 +9,13 @@ import AdminShortcut from '@/components/AdminShortcut';
 import './globals.css';
 import { getAboutContent, getSettings } from '@/lib/data';
 import type { Metadata } from 'next';
-import type { SocialLink } from '@/lib/types';
+import type { SocialLink, AboutContent } from '@/lib/types';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await getSettings();
-  const aboutContent = await getAboutContent();
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || '';
-
-  const siteTitle = settings?.site_title || "Inioluwa's Digital Atelier";
-  const description = aboutContent?.meta_description || aboutContent?.paragraph1 || "A creative visionary blending architecture, design, and innovation.";
-  const ogImage = aboutContent?.og_image_url || aboutContent?.image_url;
+  // Using a fallback URL to prevent crash, but user should set NEXT_PUBLIC_SITE_URL in .env.local
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const siteTitle = "Inioluwa's Digital Atelier";
+  const description = "A creative visionary blending architecture, design, and innovation.";
 
   return {
     metadataBase: new URL(siteUrl),
@@ -32,20 +29,21 @@ export async function generateMetadata(): Promise<Metadata> {
       description: description,
       url: siteUrl,
       siteName: siteTitle,
-      images: ogImage ? [ogImage] : [],
+      images: [],
       type: 'website',
     },
     twitter: {
       card: 'summary_large_image',
       title: siteTitle,
       description: description,
-      images: ogImage ? [ogImage] : [],
+      images: [],
     },
     icons: {
-      icon: aboutContent?.favicon_url || '/favicon.ico',
+      icon: '/favicon.ico',
     },
   };
 }
+
 
 export default async function RootLayout({
   children,
@@ -58,13 +56,9 @@ export default async function RootLayout({
   const isAdminRoute = pathname.startsWith('/admin');
   const isLoginRoute = pathname === '/login';
 
-  const [settings, aboutContent] = await Promise.all([
-    getSettings(),
-    getAboutContent()
-  ]);
-  
-  // Temporarily providing empty social links to prevent site crash due to database RLS policy issue.
+  // Removed database calls to prevent crashes from missing RLS policies or env vars.
   const socialLinks: SocialLink[] = [];
+  const aboutContent: AboutContent | null = null;
 
   return (
     <html lang="en" suppressHydrationWarning>

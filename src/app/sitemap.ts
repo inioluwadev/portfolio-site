@@ -7,10 +7,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
   // Use an anon client as this runs at build time.
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  // Static pages from navLinks are always included
+  const staticRoutes = navLinks
+    .map(link => ({
+      url: `${siteUrl}${link.href}`,
+      lastModified: new Date().toISOString(),
+      changeFrequency: 'monthly' as const,
+      priority: link.href === '/' ? 1.0 : 0.9,
+    }));
+
+  // If Supabase keys are not set, return only static routes to prevent build errors.
+  if (!supabaseUrl || !supabaseAnonKey) {
+    console.warn("Supabase URL or Anon Key is missing. Sitemap will only contain static routes.");
+    return staticRoutes;
+  }
+
+  const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
   // Fetch Projects
   const { data: projects } = await supabase.from('projects').select('slug, created_at');
@@ -29,15 +44,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: 'weekly' as const,
     priority: 0.7,
   }));
-
-  // Static pages from navLinks
-  const staticRoutes = navLinks
-    .map(link => ({
-      url: `${siteUrl}${link.href}`,
-      lastModified: new Date().toISOString(),
-      changeFrequency: 'monthly' as const,
-      priority: link.href === '/' ? 1.0 : 0.9,
-    }));
 
   return [
     ...staticRoutes,
