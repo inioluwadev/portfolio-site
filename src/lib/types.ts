@@ -24,7 +24,7 @@ export const aboutContentSchema = z.object({
   paragraph1: z.string().min(10, 'First paragraph is required.'),
   paragraph2: z.string().min(10, 'Second paragraph is required.'),
   image_url: z.string({ required_error: "An image is required." }).url('A valid image URL is required.').min(1, 'An image is required.'),
-  cv_url: z.string().url({ message: "Must be a valid URL." }).optional().nullable(),
+  cv_url: z.string({ required_error: "A CV document is required." }).url('A valid CV URL is required.').min(1, 'A CV document is required.'),
   substack_url: z.string().url({ message: "Must be a valid Substack URL." }),
   rss_url: z.string().url({ message: "Must be a valid RSS Feed URL." }),
 });
