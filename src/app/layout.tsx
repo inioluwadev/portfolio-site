@@ -12,12 +12,12 @@ import type { Metadata } from 'next';
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings();
-  const aboutContent = await getAboutContent();
+  // const aboutContent = await getAboutContent(); // Temporarily disabled to prevent crash
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || '';
 
   const siteTitle = settings?.site_title || "Inioluwa's Digital Atelier";
-  const description = aboutContent?.meta_description || aboutContent?.paragraph1 || "A creative visionary blending architecture, design, and innovation.";
-  const ogImage = aboutContent?.og_image_url || aboutContent?.image_url;
+  const description = "A creative visionary blending architecture, design, and innovation."; // Fallback description
+  const ogImage = undefined; // Fallback
 
   return {
     metadataBase: new URL(siteUrl),
@@ -41,7 +41,7 @@ export async function generateMetadata(): Promise<Metadata> {
       images: ogImage ? [ogImage] : [],
     },
     icons: {
-      icon: aboutContent?.favicon_url || '/favicon.ico',
+      icon: '/favicon.ico', // Fallback icon
     },
   };
 }
@@ -57,8 +57,8 @@ export default async function RootLayout({
   const isAdminRoute = pathname.startsWith('/admin');
   const isLoginRoute = pathname === '/login';
 
-  const [aboutContent, settings, socialLinks] = await Promise.all([
-    getAboutContent(),
+  // Temporarily removed getAboutContent to prevent site crash from DB permission errors.
+  const [settings, socialLinks] = await Promise.all([
     getSettings(),
     getSocialLinks()
   ]);

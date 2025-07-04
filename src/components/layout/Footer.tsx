@@ -6,8 +6,8 @@ import { getAboutContent } from '@/lib/data';
 import type { SocialLink } from '@/lib/types';
 
 export default async function Footer({ socialLinks }: { socialLinks: SocialLink[] }) {
-  const aboutContent = await getAboutContent();
-  const substackUrl = aboutContent?.substack_url || "";
+  // const aboutContent = await getAboutContent(); // Temporarily disabled to prevent crash
+  const substackUrl = ""; // Fallback to disable form
 
   return (
     <footer className="border-t border-border/40">
