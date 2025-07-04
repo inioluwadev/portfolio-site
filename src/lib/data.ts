@@ -20,12 +20,14 @@ type SocialLink = {
   icon: LucideIcon;
 };
 
+const substackUrl = 'https://inioluwa.substack.com';
+
 export const socialLinks: SocialLink[] = [
   { name: 'LinkedIn', url: 'https://linkedin.com', icon: Linkedin },
   { name: 'Instagram', url: 'https://instagram.com', icon: Instagram },
   { name: 'Twitter (X)', url: 'https://x.com', icon: Twitter },
   { name: 'Threads', url: 'https://threads.net', icon: Send },
-  { name: 'Substack', url: 'https://substack.com', icon: BookOpen },
+  { name: 'Substack', url: substackUrl, icon: BookOpen },
   { name: 'Mastodon', url: 'https://mastodon.social', icon: AtSign },
 ];
 
@@ -120,7 +122,7 @@ export const blogPosts: BlogPost[] = [
     date: 'October 26, 2023',
     tags: ['Architecture', 'Innovation'],
     preview: 'Exploring how computational tools are pushing the boundaries of what is possible in structural and aesthetic design...',
-    url: '#',
+    url: substackUrl,
   },
   {
     id: '2',
@@ -128,7 +130,7 @@ export const blogPosts: BlogPost[] = [
     date: 'September 15, 2023',
     tags: ['Design', 'Sustainability'],
     preview: 'A deep dive into why sustainable practices should be at the core of every design decision, not just an afterthought...',
-    url: '#',
+    url: substackUrl,
   },
   {
     id: '3',
@@ -136,6 +138,6 @@ export const blogPosts: BlogPost[] = [
     date: 'August 02, 2023',
     tags: ['Architecture', 'Well-being'],
     preview: 'An analysis of the profound impact that architectural environments have on our mental and emotional states...',
-    url: '#',
+    url: substackUrl,
   },
 ];

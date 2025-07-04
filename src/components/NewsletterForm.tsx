@@ -8,8 +8,7 @@ export default function NewsletterForm() {
   return (
     <form 
       className="flex w-full max-w-md items-center space-x-2"
-      // Replace with your Substack form action URL
-      action="#" 
+      action="https://inioluwa.substack.com/api/v1/free_email_signup"
       method="post" 
       target="_blank"
     >
