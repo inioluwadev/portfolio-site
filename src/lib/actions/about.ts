@@ -44,6 +44,9 @@ export async function updateAboutContent(prevState: any, formData: FormData): Pr
     const cvFile = formData.get('cv_url') as File | null;
     const originalCvUrl = formData.get('cv_url_original_url') as string | null;
 
+    const faviconFile = formData.get('favicon_url') as File | null;
+    const originalFaviconUrl = formData.get('favicon_url_original_url') as string | null;
+
     let finalImageUrl: string | null = originalImageUrl || null;
     if (imageFile && imageFile.size > 0) {
       finalImageUrl = await uploadFile(imageFile, supabase, 'images');
@@ -54,6 +57,11 @@ export async function updateAboutContent(prevState: any, formData: FormData): Pr
       finalCvUrl = await uploadFile(cvFile, supabase, 'cv');
     }
 
+    let finalFaviconUrl: string | null = originalFaviconUrl || null;
+    if (faviconFile && faviconFile.size > 0) {
+      finalFaviconUrl = await uploadFile(faviconFile, supabase, 'images');
+    }
+
     const dataToValidate = {
       headline: values.headline,
       paragraph1: values.paragraph1,
@@ -62,6 +70,7 @@ export async function updateAboutContent(prevState: any, formData: FormData): Pr
       substack_url: values.substack_url,
       rss_url: values.rss_url,
       image_url: finalImageUrl,
+      favicon_url: finalFaviconUrl,
     };
     
     const validatedData = aboutContentSchema.safeParse(dataToValidate);
@@ -81,7 +90,7 @@ export async function updateAboutContent(prevState: any, formData: FormData): Pr
 
     revalidatePath('/about');
     revalidatePath('/admin/about');
-    revalidatePath('/', 'layout'); // for footer
+    revalidatePath('/', 'layout'); // for footer and favicon
     revalidatePath('/admin/blog'); // for blog sync RssInfo
     return { success: true };
   } catch (e: any) {

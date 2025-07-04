@@ -27,6 +27,7 @@ export const aboutContentSchema = z.object({
   cv_url: z.string({ required_error: "A CV document is required." }).url('A valid CV URL is required.').min(1, 'A CV document is required.'),
   substack_url: z.string().url({ message: "Must be a valid Substack URL." }),
   rss_url: z.string().url({ message: "Must be a valid RSS Feed URL." }),
+  favicon_url: z.string().url().optional().nullable(),
 });
 
 export type AboutContent = z.infer<typeof aboutContentSchema>;

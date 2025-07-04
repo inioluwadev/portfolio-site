@@ -111,6 +111,19 @@ export function AboutForm({ aboutContent, formAction }: AboutFormProps) {
         />
         <FormField
           control={form.control}
+          name="favicon_url"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Favicon</FormLabel>
+              <FormControl>
+                <ImageUpload name={field.name} defaultValue={field.value} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="cv_url"
           render={({ field }) => (
             <FormItem>
