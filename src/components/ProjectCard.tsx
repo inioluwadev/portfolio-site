@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { type Project } from '@/lib/data';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import type { Project } from '@/lib/types';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ArrowRight } from 'lucide-react';
 
@@ -15,12 +15,12 @@ export default function ProjectCard({ project }: ProjectCardProps) {
       <Card className="h-full overflow-hidden transition-all duration-300 ease-in-out group-hover:shadow-xl group-hover:-translate-y-1">
         <CardContent className="p-0">
           <Image
-            src={project.imageUrl}
+            src={project.image_url}
             alt={project.title}
             width={600}
             height={400}
             className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
-            data-ai-hint={project.imageHint}
+            data-ai-hint={project.image_hint ?? ''}
           />
         </CardContent>
         <div className="p-6">

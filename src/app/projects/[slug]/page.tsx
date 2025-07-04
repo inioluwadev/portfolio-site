@@ -1,8 +1,7 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import { projects } from '@/lib/data';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
+import { getProjects, getProjectBySlug } from '@/lib/actions/projects';
 
 type ProjectDetailPageProps = {
   params: {
@@ -10,30 +9,37 @@ type ProjectDetailPageProps = {
   };
 };
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const projects = await getProjects();
   return projects.map((project) => ({
     slug: project.slug,
   }));
 }
 
-export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
-  const project = projects.find((p) => p.slug === params.slug);
+export default async function ProjectDetailPage({ params }: ProjectDetailPageProps) {
+  const project = await getProjectBySlug(params.slug);
 
-  if (!project) {
+  if (!project || !project.details) {
     notFound();
   }
+
+  const headerImage = project.details.find(d => d.type === 'image');
 
   return (
     <article>
       <header className="relative h-[60vh] w-full">
-        <Image
-          src={project.details[0].content}
-          alt={project.title}
-          layout="fill"
-          objectFit="cover"
-          className="z-0"
-          data-ai-hint={project.details[0].imageHint}
-        />
+        {headerImage ? (
+            <Image
+            src={headerImage.content}
+            alt={project.title}
+            layout="fill"
+            objectFit="cover"
+            className="z-0"
+            data-ai-hint={headerImage.imageHint ?? ''}
+          />
+        ) : (
+          <div className="absolute inset-0 bg-muted z-0"></div>
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-transparent z-10" />
         <div className="relative z-20 container mx-auto h-full flex flex-col justify-end pb-12">
           <Badge variant="default" className="mb-4 w-fit">{project.category}</Badge>
@@ -58,7 +64,7 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
                     width={1200}
                     height={800}
                     className="rounded-lg shadow-lg"
-                    data-ai-hint={detail.imageHint}
+                    data-ai-hint={detail.imageHint ?? ''}
                   />
                 </div>
               );
