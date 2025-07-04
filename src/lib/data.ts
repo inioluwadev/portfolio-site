@@ -1,5 +1,4 @@
 import { Linkedin, Instagram, Twitter, Send, BookOpen, AtSign, type LucideIcon } from 'lucide-react';
-import type { Project } from '@/lib/types';
 
 type NavLink = {
   href: string;
@@ -31,16 +30,3 @@ export const socialLinks: SocialLink[] = [
   { name: 'Substack', url: substackUrl, icon: BookOpen },
   { name: 'Mastodon', url: 'https://mastodon.social', icon: AtSign },
 ];
-
-export const projects: Project[] = [];
-
-export type BlogPost = {
-  id: string;
-  title: string;
-  date: string;
-  tags: string[];
-  preview: string;
-  url:string;
-};
-
-export const blogPosts: BlogPost[] = [];

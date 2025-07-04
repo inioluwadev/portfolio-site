@@ -1,10 +1,12 @@
-import { blogPosts } from '@/lib/data';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
+import { getBlogPosts } from '@/lib/actions/blog';
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const posts = await getBlogPosts();
+
   return (
     <div className="container max-w-4xl mx-auto py-16 md:py-24 px-4">
       <div className="text-center mb-12">
@@ -15,17 +17,17 @@ export default function BlogPage() {
       </div>
 
       <div className="space-y-8">
-        {blogPosts.length > 0 ? (
-          blogPosts.map((post, index) => (
-            <div key={post.id} className="animate-fadeInUp" style={{ animationDelay: `${index * 100}ms`}}>
+        {posts.length > 0 ? (
+          posts.map((post, index) => (
+            <div key={post.guid} className="animate-fadeInUp" style={{ animationDelay: `${index * 100}ms`}}>
               <Card className="group transition-shadow hover:shadow-lg">
-                <Link href={post.url} target="_blank" rel="noopener noreferrer" className="block p-6">
+                <Link href={post.link} target="_blank" rel="noopener noreferrer" className="block p-6">
                   <CardHeader className="p-0">
                     <CardTitle className="font-headline text-2xl group-hover:text-primary transition-colors">
                       {post.title}
                       <ArrowUpRight className="inline-block ml-2 h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </CardTitle>
-                    <CardDescription className="text-sm pt-2">{post.date}</CardDescription>
+                    <CardDescription className="text-sm pt-2">{post.pub_date}</CardDescription>
                   </CardHeader>
                   <CardContent className="p-0 mt-4">
                     <p className="text-foreground/80">{post.preview}</p>

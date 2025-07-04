@@ -9,6 +9,9 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Send } from 'lucide-react';
+import { useFormState, useFormStatus } from 'react-dom';
+import { createContactMessage } from '@/lib/actions/messages';
+import { useEffect, useRef } from 'react';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -16,8 +19,20 @@ const formSchema = z.object({
   message: z.string().min(10, { message: 'Message must be at least 10 characters.' }),
 });
 
+function SubmitButton() {
+    const { pending } = useFormStatus();
+    return (
+        <Button type="submit" className="w-full" disabled={pending}>
+            {pending ? 'Sending...' : <>Send Message <Send className="ml-2 h-4 w-4" /></>}
+        </Button>
+    )
+}
+
 export default function ContactForm() {
   const { toast } = useToast();
+  const [state, formAction] = useFormState(createContactMessage, undefined);
+  const formRef = useRef<HTMLFormElement>(null);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -27,20 +42,27 @@ export default function ContactForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // This is where you would handle form submission, e.g., send to an API endpoint.
-    // For this demo, we'll just show a success toast.
-    console.log(values);
-    toast({
-      title: 'Message Sent!',
-      description: "Thanks for reaching out. I'll get back to you shortly.",
-    });
-    form.reset();
-  }
+  useEffect(() => {
+    if (state?.error) {
+        toast({
+            variant: 'destructive',
+            title: 'An error occurred',
+            description: 'Please check the form for errors.',
+        });
+    }
+    if (state?.success) {
+        toast({
+            title: 'Message Sent!',
+            description: "Thanks for reaching out. I'll get back to you shortly.",
+        });
+        formRef.current?.reset();
+    }
+  }, [state, toast, form]);
+
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form ref={formRef} action={formAction} className="space-y-6">
         <FormField
           control={form.control}
           name="name"
@@ -48,7 +70,7 @@ export default function ContactForm() {
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="Your Name" {...field} />
+                <Input placeholder="Your Name" {...field} name="name" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -61,7 +83,7 @@ export default function ContactForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="your.email@example.com" {...field} />
+                <Input placeholder="your.email@example.com" {...field} name="email" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -74,15 +96,14 @@ export default function ContactForm() {
             <FormItem>
               <FormLabel>Message</FormLabel>
               <FormControl>
-                <Textarea placeholder="Tell me about your project or inquiry..." className="min-h-[120px]" {...field} />
+                <Textarea placeholder="Tell me about your project or inquiry..." className="min-h-[120px]" {...field} name="message" />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting ? 'Sending...' : <>Send Message <Send className="ml-2 h-4 w-4" /></>}
-        </Button>
+        <SubmitButton />
+        {state?.error?._form && <p className="text-sm text-destructive">{state.error._form[0]}</p>}
       </form>
     </Form>
   );

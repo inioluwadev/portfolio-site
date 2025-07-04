@@ -44,3 +44,23 @@ export const manifestoCoreBeliefSchema = z.object({
   core_belief: z.string().min(10, 'Core belief must be at least 10 characters.'),
 });
 export type ManifestoCoreBelief = z.infer<typeof manifestoCoreBeliefSchema>;
+
+export const blogPostSchema = z.object({
+  guid: z.string(),
+  title: z.string(),
+  link: z.string().url(),
+  pub_date: z.string(),
+  preview: z.string(),
+  tags: z.array(z.string()),
+});
+
+export type BlogPost = z.infer<typeof blogPostSchema>;
+
+export const contactMessageSchema = z.object({
+  id: z.string().uuid(),
+  created_at: z.string(),
+  name: z.string(),
+  email: z.string().email(),
+  message: z.string(),
+});
+export type ContactMessage = z.infer<typeof contactMessageSchema>;
