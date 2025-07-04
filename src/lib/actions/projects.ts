@@ -67,27 +67,54 @@ async function processProjectFormData(formData: FormData, supabase: SupabaseClie
     return d.type !== 'image' || (d.type === 'image' && d.content);
   });
   
-  return projectSchema.safeParse({
+  // 3. Handle tags string
+  const tagsString = (values.tags as string) || '';
+  const tagsArray = tagsString.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
+
+  const dataToValidate = {
     title: values.title,
     slug: values.slug,
     category: values.category,
     description: values.description,
     image_url: finalMainImageUrl,
     details: finalDetails,
+    year: values.year,
+    tags: tagsArray, // Note: passing array to schema, but schema expects string. Correcting this.
+    is_featured: values.is_featured === 'on',
+  };
+
+  // The schema expects a string for tags, so we pass the original string
+  const validatedWithFormTypes = projectSchema.safeParse({
+    ...dataToValidate,
+    tags: tagsString, // Pass the original string for validation
   });
+
+  if (!validatedWithFormTypes.success) {
+    // Return validation errors
+    return validatedWithFormTypes;
+  }
+  
+  // Return the validated data, but with tags as an array for the database
+  return {
+    ...validatedWithFormTypes,
+    data: {
+      ...validatedWithFormTypes.data,
+      tags: tagsArray
+    }
+  };
 }
 
 export async function createProject(prevState: any, formData: FormData) {
   const supabase = createActionClient();
   
   try {
-    const validatedData = await processProjectFormData(formData, supabase);
+    const validatedResult = await processProjectFormData(formData, supabase);
 
-    if (!validatedData.success) {
-      return { error: validatedData.error.flatten().fieldErrors };
+    if (!validatedResult.success) {
+      return { error: validatedResult.error.flatten().fieldErrors };
     }
 
-    const { error } = await supabase.from('projects').insert(validatedData.data);
+    const { error } = await supabase.from('projects').insert(validatedResult.data);
 
     if (error) {
       return { error: { _form: [error.message] } };
@@ -105,13 +132,13 @@ export async function updateProject(id: string, prevState: any, formData: FormDa
   const supabase = createActionClient();
 
   try {
-    const validatedData = await processProjectFormData(formData, supabase);
+    const validatedResult = await processProjectFormData(formData, supabase);
 
-    if (!validatedData.success) {
-      return { error: validatedData.error.flatten().fieldErrors };
+    if (!validatedResult.success) {
+      return { error: validatedResult.error.flatten().fieldErrors };
     }
 
-    const { error } = await supabase.from('projects').update(validatedData.data).eq('id', id);
+    const { error } = await supabase.from('projects').update(validatedResult.data).eq('id', id);
 
     if (error) {
       return { error: { _form: [error.message] } };
@@ -138,4 +165,20 @@ export async function deleteProject(id: string) {
     revalidatePath('/admin/projects');
     revalidatePath('/projects');
     redirect('/admin/projects');
+}
+
+export async function toggleProjectFeatured(id: string, currentState: boolean) {
+  const supabase = createActionClient();
+  const { error } = await supabase
+    .from('projects')
+    .update({ is_featured: !currentState })
+    .eq('id', id);
+
+  if (error) {
+    console.error("Error toggling project featured status:", error);
+    // Consider returning an error object that can be handled by the client
+  }
+
+  revalidatePath('/admin/projects');
+  revalidatePath('/projects'); // Revalidate if you have a "featured" section
 }

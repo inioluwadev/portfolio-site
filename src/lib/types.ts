@@ -14,9 +14,14 @@ export const projectSchema = z.object({
   description: z.string().min(10, 'Description must be at least 10 characters.'),
   image_url: z.string().url('Must be a valid URL.').optional().nullable(),
   details: z.array(projectDetailSchema).optional().nullable().default([]),
+  tags: z.string().optional(), // Form will use a string, action will convert to array
+  year: z.coerce.number().optional().nullable(),
+  is_featured: z.boolean().optional().default(false),
 });
 
-export type Project = z.infer<typeof projectSchema>;
+export type Project = z.infer<typeof projectSchema> & {
+    tags: string[]; // Actual type from DB
+};
 export type ProjectDetail = z.infer<typeof projectDetailSchema>;
 
 export const aboutContentSchema = z.object({

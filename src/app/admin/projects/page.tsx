@@ -7,6 +7,7 @@ import { getProjects } from '@/lib/data';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { FeaturedToggleSwitch } from '@/components/forms/FeaturedToggleSwitch';
 
 async function DeleteButton({ id }: { id: string }) {
   const deleteProjectWithId = deleteProject.bind(null, id);
@@ -46,7 +47,8 @@ export default async function AdminProjectsPage() {
               <TableRow>
                 <TableHead>Title</TableHead>
                 <TableHead>Category</TableHead>
-                <TableHead>Date Added</TableHead>
+                <TableHead>Year</TableHead>
+                <TableHead>Featured</TableHead>
                 <TableHead><span className="sr-only">Actions</span></TableHead>
               </TableRow>
             </TableHeader>
@@ -55,7 +57,10 @@ export default async function AdminProjectsPage() {
                 <TableRow key={project.id}>
                   <TableCell className="font-medium">{project.title}</TableCell>
                   <TableCell><Badge variant="secondary">{project.category}</Badge></TableCell>
-                  <TableCell>{new Date(project.created_at!).toLocaleDateString()}</TableCell>
+                  <TableCell>{project.year}</TableCell>
+                  <TableCell>
+                    <FeaturedToggleSwitch id={project.id!} isFeatured={project.is_featured ?? false} />
+                  </TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>

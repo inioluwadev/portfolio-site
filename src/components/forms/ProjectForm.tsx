@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { projectSchema, type Project, type ProjectDetail } from '@/lib/types';
 import { slugify } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -16,6 +16,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { ImageUpload } from '../ui/ImageUpload';
+import { Switch } from '@/components/ui/switch';
 
 function SubmitButton({ isEditing }: { isEditing: boolean }) {
   const { pending } = useFormStatus();
@@ -43,13 +44,19 @@ export function ProjectForm({ project, formAction }: ProjectFormProps) {
 
   const form = useForm<Project>({
     resolver: zodResolver(projectSchema),
-    defaultValues: project || {
+    defaultValues: project ? {
+      ...project,
+      tags: Array.isArray(project.tags) ? project.tags.join(', ') : '',
+    } : {
       title: '',
       slug: '',
       category: 'Architecture',
       description: '',
       image_url: null,
       details: [],
+      tags: '',
+      year: new Date().getFullYear(),
+      is_featured: false,
     },
   });
 
@@ -140,6 +147,35 @@ export function ProjectForm({ project, formAction }: ProjectFormProps) {
             />
             <FormField
               control={form.control}
+              name="year"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Year</FormLabel>
+                  <FormControl>
+                    <Input type="number" {...field} value={field.value ?? ''} placeholder="e.g., 2024" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="tags"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Tags</FormLabel>
+                  <FormControl>
+                    <Input {...field} value={field.value ?? ''} placeholder="design, architecture, featured" />
+                  </FormControl>
+                  <FormDescription>
+                    Enter tags separated by commas.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="description"
               render={({ field }) => (
                 <FormItem>
@@ -161,6 +197,26 @@ export function ProjectForm({ project, formAction }: ProjectFormProps) {
                     <ImageUpload name="image_url" defaultValue={field.value} />
                   </FormControl>
                   <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="is_featured"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                  <div className="space-y-0.5">
+                    <FormLabel>Feature this project?</FormLabel>
+                    <FormDescription>
+                      Featured projects may be displayed more prominently.
+                    </FormDescription>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
                 </FormItem>
               )}
             />
