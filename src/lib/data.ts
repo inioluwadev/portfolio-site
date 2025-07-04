@@ -1,6 +1,10 @@
 import { createClient } from '@/lib/supabase/server';
 import type { AboutContent, BlogPost, ContactMessage, ManifestoCoreBelief, ManifestoPrinciple, Project } from '@/lib/types';
 
+// The standard supabase-js client is used for functions that run at build time (like generateStaticParams)
+// because they don't have access to the request cookies.
+import { createClient as createAnonClient } from '@supabase/supabase-js';
+
 // --- Data Fetching Functions ---
 
 // About
@@ -98,7 +102,12 @@ export async function getContactMessages(): Promise<ContactMessage[]> {
 
 // Projects
 export async function getProjects(filters?: { category?: string }): Promise<Project[]> {
-  const supabase = createClient();
+  // This function is called from generateStaticParams, which runs at build time.
+  // It cannot use the cookie-based server client, so we use a public, anonymous client.
+  const supabase = createAnonClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
   let query = supabase.from('projects').select('*').order('created_at', { ascending: false });
 
   if (filters?.category && filters.category !== 'All') {
