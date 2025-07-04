@@ -31,7 +31,7 @@ export async function getAboutContent(): Promise<AboutContent | null> {
     .single();
 
   if (error) {
-    console.error(`Error fetching about content: ${error.message}. ${RLS_HINT}`);
+    console.warn(`[DATABASE PERMISSION WARNING] Error fetching about content: ${error.message}. ${RLS_HINT}`);
     return null;
   }
   return data;
@@ -47,7 +47,7 @@ export async function getManifestoCoreBelief(): Promise<ManifestoCoreBelief | nu
     .single();
 
   if (error) {
-    console.error(`Error fetching manifesto core belief: ${error.message}. ${RLS_HINT}`);
+    console.warn(`[DATABASE PERMISSION WARNING] Error fetching manifesto core belief: ${error.message}. ${RLS_HINT}`);
     return null;
   }
   return data;
@@ -61,7 +61,7 @@ export async function getManifestoPrinciples(): Promise<ManifestoPrinciple[]> {
     .order('created_at', { ascending: true });
 
   if (error) {
-    console.error(`Error fetching manifesto principles: ${error.message}. ${RLS_HINT}`);
+    console.warn(`[DATABASE PERMISSION WARNING] Error fetching manifesto principles: ${error.message}. ${RLS_HINT}`);
     return [];
   }
   return data || [];
@@ -79,7 +79,7 @@ export async function getProjects(filters?: { category?: string }): Promise<Proj
   const { data, error } = await query;
 
   if (error) {
-    console.error(`Error fetching projects: ${error.message}. ${RLS_HINT}`);
+    console.warn(`[DATABASE PERMISSION WARNING] Error fetching projects: ${error.message}. ${RLS_HINT}`);
     return [];
   }
   return data || [];
@@ -89,7 +89,7 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
     const supabase = getAnonClient();
     const { data, error } = await supabase.from('projects').select('*, seo_title, meta_description, og_image_url').eq('slug', slug).single();
     if (error) {
-      console.error(`Error fetching project by slug: ${error.message}. ${RLS_HINT}`);
+      console.warn(`[DATABASE PERMISSION WARNING] Error fetching project by slug: ${error.message}. ${RLS_HINT}`);
       return null;
     }
     return data;
@@ -105,7 +105,7 @@ export async function getSettings(): Promise<Settings | null> {
     .single();
 
   if (error) {
-    console.error(`Error fetching settings: ${error.message}. ${RLS_HINT}`);
+    console.warn(`[DATABASE PERMISSION WARNING] Error fetching settings: ${error.message}. ${RLS_HINT}`);
     // Return default settings if none are found
     return {
       site_title: "Inioluwa's Digital Atelier",
@@ -124,7 +124,7 @@ export async function getSocialLinks(): Promise<SocialLink[]> {
     .order('sort_order', { ascending: true });
 
   if (error) {
-    console.error(`[DATABASE PERMISSION ERROR] Error fetching social links: ${error.message}. This is most likely because the 'social_links' table is missing a Row Level Security (RLS) policy for public access. Please run the required SQL script in your Supabase dashboard.`);
+    console.warn(`[DATABASE PERMISSION WARNING] Error fetching social links: ${error.message}. This is most likely because the 'social_links' table is missing a Row Level Security (RLS) policy for public access. Please run the required SQL script in your Supabase dashboard.`);
     return [];
   }
   return data || [];
