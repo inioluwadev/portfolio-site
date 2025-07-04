@@ -33,21 +33,27 @@ export async function syncBlogPosts(prevState: any, formData: FormData) {
   }
   
   console.log(`Fetching RSS feed from: ${RSS_URL}`);
+  let feedText: string | undefined;
+  
   try {
-    // Manually fetch the feed to have more control and provide better error handling.
     const response = await fetch(RSS_URL, {
       headers: {
-        // Some servers block requests without a common User-Agent.
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
         'Accept': 'application/rss+xml, application/atom+xml, application/xml, text/xml'
       }
     });
 
     if (!response.ok) {
-      throw new Error(`Request failed with status ${response.status}. Please check if the RSS URL is correct.`);
+        const errorBody = await response.text();
+        throw new Error(`Request failed with status ${response.status}. Response from server: ${errorBody.substring(0, 200)}...`);
     }
 
-    const feedText = await response.text();
+    feedText = await response.text();
+    
+    if (!feedText || !feedText.trim().startsWith('<')) {
+        throw new Error(`The response from the URL was not XML. Received: ${feedText.substring(0, 200)}...`);
+    }
+
     const feed = await parser.parseString(feedText);
 
     if (!feed?.items) {
