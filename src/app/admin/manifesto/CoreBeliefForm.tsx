@@ -7,9 +7,9 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
 import { Save } from 'lucide-react';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useFormStatus } from 'react-dom';
 import { useToast } from '@/hooks/use-toast';
-import { useEffect } from 'react';
+import { useActionState, useEffect } from 'react';
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -27,7 +27,7 @@ type CoreBeliefFormProps = {
 };
 
 export function CoreBeliefForm({ coreBelief, formAction }: CoreBeliefFormProps) {
-  const [state, action] = useFormState(formAction, undefined);
+  const [state, action] = useActionState(formAction, undefined);
   const { toast } = useToast();
 
   const form = useForm<ManifestoCoreBelief>({

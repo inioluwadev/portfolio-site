@@ -2,10 +2,10 @@
 
 import { Button } from "@/components/ui/button";
 import { RefreshCw } from "lucide-react";
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormStatus } from "react-dom";
 import { syncBlogPosts } from "@/lib/actions/blog";
 import { useToast } from "@/hooks/use-toast";
-import { useEffect } from "react";
+import { useActionState, useEffect } from "react";
 import Link from 'next/link';
 
 function SubmitButton() {
@@ -33,7 +33,7 @@ function RssInfoDisplay({ rssUrl }: { rssUrl: string }) {
 }
 
 export function BlogSyncForm({ rssUrl }: { rssUrl: string }) {
-  const [state, formAction] = useFormState(syncBlogPosts, undefined);
+  const [state, formAction] = useActionState(syncBlogPosts, undefined);
   const { toast } = useToast();
 
   useEffect(() => {

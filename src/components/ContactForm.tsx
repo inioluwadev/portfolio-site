@@ -9,9 +9,9 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Send } from 'lucide-react';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useFormStatus } from 'react-dom';
 import { createContactMessage } from '@/lib/actions/messages';
-import { useEffect, useRef } from 'react';
+import { useActionState, useEffect, useRef } from 'react';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -30,7 +30,7 @@ function SubmitButton() {
 
 export default function ContactForm() {
   const { toast } = useToast();
-  const [state, formAction] = useFormState(createContactMessage, undefined);
+  const [state, formAction] = useActionState(createContactMessage, undefined);
   const formRef = useRef<HTMLFormElement>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({

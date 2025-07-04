@@ -4,10 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useFormStatus } from 'react-dom';
 import { login } from '@/lib/actions/auth';
 import { useToast } from '@/hooks/use-toast';
-import { useEffect } from 'react';
+import { useActionState, useEffect } from 'react';
 import Link from 'next/link';
 
 function SubmitButton() {
@@ -20,7 +20,7 @@ function SubmitButton() {
 }
 
 export default function LoginPage() {
-  const [state, formAction] = useFormState(login, undefined);
+  const [state, formAction] = useActionState(login, undefined);
   const { toast } = useToast();
 
   useEffect(() => {

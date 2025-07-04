@@ -11,9 +11,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Trash2, PlusCircle, Save } from 'lucide-react';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useFormStatus } from 'react-dom';
 import { useToast } from '@/hooks/use-toast';
-import { useEffect, useCallback } from 'react';
+import { useActionState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { ImageUpload } from '../ui/ImageUpload';
 import { Switch } from '@/components/ui/switch';
@@ -39,7 +39,7 @@ type ProjectFormProps = {
 };
 
 export function ProjectForm({ project, formAction }: ProjectFormProps) {
-  const [state, action] = useFormState(formAction, undefined);
+  const [state, action] = useActionState(formAction, undefined);
   const { toast } = useToast();
   const isEditing = !!project;
 

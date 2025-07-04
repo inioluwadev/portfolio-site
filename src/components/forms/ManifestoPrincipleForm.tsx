@@ -8,9 +8,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Save } from 'lucide-react';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useFormStatus } from 'react-dom';
 import { useToast } from '@/hooks/use-toast';
-import { useEffect } from 'react';
+import { useActionState, useEffect } from 'react';
 import Link from 'next/link';
 
 function SubmitButton({ isEditing }: { isEditing: boolean }) {
@@ -29,7 +29,7 @@ type ManifestoPrincipleFormProps = {
 };
 
 export function ManifestoPrincipleForm({ principle, formAction }: ManifestoPrincipleFormProps) {
-  const [state, action] = useFormState(formAction, undefined);
+  const [state, action] = useActionState(formAction, undefined);
   const { toast } = useToast();
   const isEditing = !!principle;
 

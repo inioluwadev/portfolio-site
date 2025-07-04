@@ -15,9 +15,9 @@ import {
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Save } from 'lucide-react';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useFormStatus } from 'react-dom';
 import { useToast } from '@/hooks/use-toast';
-import { useEffect } from 'react';
+import { useActionState, useEffect } from 'react';
 import Link from 'next/link';
 import { getIcon } from '@/lib/icons';
 
@@ -37,7 +37,7 @@ type SocialLinkFormProps = {
 };
 
 export function SocialLinkForm({ link, formAction }: SocialLinkFormProps) {
-  const [state, action] = useFormState(formAction, undefined);
+  const [state, action] = useActionState(formAction, undefined);
   const { toast } = useToast();
   const isEditing = !!link;
 
