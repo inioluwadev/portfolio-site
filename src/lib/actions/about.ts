@@ -13,14 +13,14 @@ async function uploadFile(file: File, supabase: SupabaseClient, bucket: 'images'
 
     if (error) {
         console.error(`Error uploading file to bucket ${bucket}:`, error);
-        throw new Error(`Failed to upload file to ${bucket}.`);
+        throw new Error(`Failed to upload file to ${bucket}: ${error.message}`);
     }
 
     const { data: { publicUrl } } = supabase.storage.from(bucket).getPublicUrl(data.path);
     return publicUrl;
 }
 
-export async function updateAboutContent(prevState: any, formData: FormData) {
+export async function updateAboutContent(prevState: any, formData: FormData): Promise<{ error?: any; success?: boolean; }> {
   const supabase = createActionClient();
   const values = Object.fromEntries(formData.entries());
 
@@ -73,7 +73,7 @@ export async function updateAboutContent(prevState: any, formData: FormData) {
     revalidatePath('/about');
     revalidatePath('/admin/about');
     revalidatePath('/', 'layout'); // for footer
-    revalidatePath('/blog'); // for blog sync RssInfo
+    revalidatePath('/admin/blog'); // for blog sync RssInfo
     return { success: true };
   } catch (e: any) {
     return { error: { _form: [e.message] } };
