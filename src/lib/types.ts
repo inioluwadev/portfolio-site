@@ -28,6 +28,8 @@ export const aboutContentSchema = z.object({
   image_url: z.string().url('Must be a valid URL.'),
   image_hint: z.string().optional().nullable(),
   cv_url: z.string().min(1, "CV URL cannot be empty."),
+  substack_url: z.string().url({ message: "Must be a valid Substack URL." }).min(1, "Substack URL cannot be empty."),
+  rss_url: z.string().url({ message: "Must be a valid RSS Feed URL." }).min(1, "RSS Feed URL cannot be empty."),
 });
 
 export type AboutContent = z.infer<typeof aboutContentSchema>;

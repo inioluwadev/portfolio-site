@@ -2,8 +2,12 @@ import Link from 'next/link';
 import { navLinks } from '@/lib/data';
 import SocialLinks from './SocialLinks';
 import NewsletterForm from '../NewsletterForm';
+import { getAboutContent } from '@/lib/actions/about';
 
-export default function Footer() {
+export default async function Footer() {
+  const aboutContent = await getAboutContent();
+  const substackUrl = aboutContent?.substack_url || "";
+
   return (
     <footer className="border-t border-border/40">
       <div className="container py-12">
@@ -13,7 +17,7 @@ export default function Footer() {
             <p className="text-foreground/60 mb-4 text-sm">
               Get insights on architecture, design, and innovation delivered to your inbox.
             </p>
-            <NewsletterForm />
+            <NewsletterForm substackUrl={substackUrl} />
           </div>
           <div>
             <h3 className="font-headline text-lg mb-4">Navigate</h3>

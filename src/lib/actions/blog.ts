@@ -1,18 +1,13 @@
-'use server';
-
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 import Parser from 'rss-parser';
 import type { BlogPost } from '@/lib/types';
+import { getAboutContent } from './about';
 
-const supabase = createClient();
 const parser = new Parser();
 
-// The Substack URL from your newsletter form
-const substackUrl = 'https://inioluwa.substack.com';
-const RSS_URL = `${substackUrl}/feed`;
-
 export async function getBlogPosts(): Promise<BlogPost[]> {
+  const supabase = createClient();
   const { data, error } = await supabase
     .from('blog_posts')
     .select('*')
@@ -34,6 +29,16 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
 }
 
 export async function syncBlogPosts() {
+  'use server';
+
+  const supabase = createClient();
+  const aboutContent = await getAboutContent();
+  const RSS_URL = aboutContent?.rss_url;
+
+  if (!RSS_URL) {
+    return { error: 'RSS URL is not configured. Please set it in the Admin > About Page section.' };
+  }
+  
   console.log(`Fetching RSS feed from: ${RSS_URL}`);
   try {
     const feed = await parser.parseURL(RSS_URL);

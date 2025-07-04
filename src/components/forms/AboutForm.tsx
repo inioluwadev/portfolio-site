@@ -133,6 +133,32 @@ export function AboutForm({ aboutContent, formAction }: AboutFormProps) {
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="substack_url"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Substack URL</FormLabel>
+              <FormControl>
+                <Input {...field} value={field.value ?? ''} placeholder="https://yourname.substack.com" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="rss_url"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Substack RSS Feed URL</FormLabel>
+              <FormControl>
+                <Input {...field} value={field.value ?? ''} placeholder="https://yourname.substack.com/feed" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         
         <SubmitButton />
         {state?.error?._form && <p className="text-sm text-destructive">{state.error._form[0]}</p>}

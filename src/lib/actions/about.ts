@@ -1,13 +1,10 @@
-'use server';
-
 import { createClient } from '@/lib/supabase/server';
 import { aboutContentSchema, type AboutContent } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-const supabase = createClient();
-
 export async function getAboutContent(): Promise<AboutContent | null> {
+  const supabase = createClient();
   const { data, error } = await supabase
     .from('about_content')
     .select('*')
@@ -23,6 +20,9 @@ export async function getAboutContent(): Promise<AboutContent | null> {
 }
 
 export async function updateAboutContent(prevState: any, formData: FormData) {
+  'use server';
+  
+  const supabase = createClient();
   const values = Object.fromEntries(formData.entries());
   
   const validatedData = aboutContentSchema.safeParse(values);
@@ -42,6 +42,7 @@ export async function updateAboutContent(prevState: any, formData: FormData) {
 
   revalidatePath('/about');
   revalidatePath('/admin/about');
+  revalidatePath('/'); // for footer
   // We don't redirect here, so the user sees a success message on the same page.
   // We will show a success toast.
   return { success: true };

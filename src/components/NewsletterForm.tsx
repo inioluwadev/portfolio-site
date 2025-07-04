@@ -4,11 +4,13 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
 
-export default function NewsletterForm() {
+export default function NewsletterForm({ substackUrl }: { substackUrl: string }) {
+  const formActionUrl = substackUrl ? `${substackUrl}/api/v1/free_email_signup` : "";
+  
   return (
     <form 
       className="flex w-full max-w-md items-center space-x-2"
-      action="https://inioluwa.substack.com/api/v1/free_email_signup"
+      action={formActionUrl}
       method="post" 
       target="_blank"
     >
@@ -18,8 +20,9 @@ export default function NewsletterForm() {
         placeholder="Enter your email"
         className="flex-1 bg-background"
         required
+        disabled={!substackUrl}
       />
-      <Button type="submit" variant="default" size="icon" aria-label="Subscribe">
+      <Button type="submit" variant="default" size="icon" aria-label="Subscribe" disabled={!substackUrl}>
         <ArrowRight className="h-4 w-4" />
       </Button>
     </form>

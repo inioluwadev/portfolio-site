@@ -7,6 +7,7 @@ import { useFormState, useFormStatus } from "react-dom";
 import { syncBlogPosts } from "@/lib/actions/blog";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect } from "react";
+import { RssInfo } from "./RssInfo";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -42,16 +43,13 @@ export default function AdminBlogPage() {
     <Card>
       <CardHeader>
         <CardTitle className="font-headline">Sync Blog Posts</CardTitle>
-        <CardDescription>Sync your latest posts from your Substack feed.</CardDescription>
+        <CardDescription>Manage the RSS feed connection for your blog.</CardDescription>
       </CardHeader>
       <CardContent>
         <form action={formAction}>
           <div className="flex items-center space-x-4 p-4 border rounded-lg">
             <div className="flex-1">
-              <h3 className="font-medium">Substack Sync</h3>
-              <p className="text-sm text-muted-foreground">
-                Fetch the latest articles to display on your blog page.
-              </p>
+              <RssInfo />
             </div>
             <SubmitButton />
           </div>

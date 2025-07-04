@@ -1,14 +1,11 @@
-'use server';
-
 import { createClient } from '@/lib/supabase/server';
 import { manifestoCoreBeliefSchema, manifestoPrincipleSchema, type ManifestoCoreBelief, type ManifestoPrinciple } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-const supabase = createClient();
-
 // Core Belief Actions
 export async function getManifestoCoreBelief(): Promise<ManifestoCoreBelief | null> {
+  const supabase = createClient();
   const { data, error } = await supabase
     .from('manifesto_content')
     .select('core_belief')
@@ -23,6 +20,9 @@ export async function getManifestoCoreBelief(): Promise<ManifestoCoreBelief | nu
 }
 
 export async function updateManifestoCoreBelief(prevState: any, formData: FormData) {
+  'use server';
+
+  const supabase = createClient();
   const values = Object.fromEntries(formData.entries());
   const validatedData = manifestoCoreBeliefSchema.safeParse(values);
 
@@ -46,6 +46,7 @@ export async function updateManifestoCoreBelief(prevState: any, formData: FormDa
 
 // Principles Actions
 export async function getManifestoPrinciples(): Promise<ManifestoPrinciple[]> {
+  const supabase = createClient();
   const { data, error } = await supabase
     .from('manifesto_principles')
     .select('*')
@@ -59,6 +60,7 @@ export async function getManifestoPrinciples(): Promise<ManifestoPrinciple[]> {
 }
 
 export async function getManifestoPrincipleById(id: string): Promise<ManifestoPrinciple | null> {
+  const supabase = createClient();
   const { data, error } = await supabase.from('manifesto_principles').select('*').eq('id', id).single();
   if (error) {
     console.error('Error fetching principle by ID:', error);
@@ -68,6 +70,9 @@ export async function getManifestoPrincipleById(id: string): Promise<ManifestoPr
 }
 
 export async function createManifestoPrinciple(formData: FormData) {
+  'use server';
+
+  const supabase = createClient();
   const values = Object.fromEntries(formData.entries());
   const validatedData = manifestoPrincipleSchema.safeParse(values);
 
@@ -87,6 +92,9 @@ export async function createManifestoPrinciple(formData: FormData) {
 }
 
 export async function updateManifestoPrinciple(id: string, formData: FormData) {
+  'use server';
+
+  const supabase = createClient();
   const values = Object.fromEntries(formData.entries());
   const validatedData = manifestoPrincipleSchema.safeParse(values);
 
@@ -106,6 +114,9 @@ export async function updateManifestoPrinciple(id: string, formData: FormData) {
 }
 
 export async function deleteManifestoPrinciple(id: string) {
+  'use server';
+
+  const supabase = createClient();
   const { error } = await supabase.from('manifesto_principles').delete().eq('id', id);
 
   if (error) {
