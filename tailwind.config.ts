@@ -17,8 +17,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        body: ['Inter', 'sans-serif'],
-        headline: ['Belleza', 'sans-serif'],
+        body: ['"Exo 2"', 'sans-serif'],
+        headline: ['Rajdhani', 'sans-serif'],
       },
       colors: {
         background: 'hsl(var(--background))',
@@ -61,11 +61,16 @@ export default {
           '4': 'hsl(var(--chart-4))',
           '5': 'hsl(var(--chart-5))',
         },
+        'electric-blue': '#00CFFF',
+        'vivid-purple': '#9A00FF',
       },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+      },
+      boxShadow: {
+        glow: '0 0 20px hsl(var(--primary) / 0.5), 0 0 30px hsl(var(--accent) / 0.3)',
       },
       keyframes: {
         'accordion-down': {
@@ -77,14 +82,19 @@ export default {
           to: { height: '0' },
         },
         'fadeInUp': {
-          'from': { opacity: '0', transform: 'translateY(20px)' },
+          'from': { opacity: '0', transform: 'translateY(10px)' },
           'to': { opacity: '1', transform: 'translateY(0)' },
+        },
+        'aurora': {
+          from: { backgroundPosition: '0% 50%' },
+          to: { backgroundPosition: '100% 50%' },
         },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
-        'fadeInUp': 'fadeInUp 0.8s ease-out forwards',
+        'fadeInUp': 'fadeInUp 0.6s ease-out forwards',
+        'aurora': 'aurora 15s ease infinite alternate',
       },
     },
   },

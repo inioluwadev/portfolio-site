@@ -22,7 +22,7 @@ const formSchema = z.object({
 function SubmitButton() {
     const { pending } = useFormStatus();
     return (
-        <Button type="submit" className="w-full" disabled={pending}>
+        <Button type="submit" className="w-full bg-gradient-to-r from-primary to-accent text-primary-foreground hover:shadow-glow transition-shadow duration-300" disabled={pending}>
             {pending ? 'Sending...' : <>Send Message <Send className="ml-2 h-4 w-4" /></>}
         </Button>
     )

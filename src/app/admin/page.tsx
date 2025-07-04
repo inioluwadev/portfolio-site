@@ -16,10 +16,10 @@ export default async function AdminDashboardPage() {
     <div className="space-y-8">
       <div className="flex justify-between items-center animate-fadeInUp">
         <div>
-          <h2 className="text-3xl font-bold font-headline">Welcome back, Inioluwa.</h2>
+          <h2 className="text-3xl font-bold font-headline text-gradient">Welcome back, Inioluwa.</h2>
           <p className="text-muted-foreground">Here's a snapshot of your digital atelier.</p>
         </div>
-        <Button asChild>
+        <Button asChild className="bg-gradient-to-r from-primary to-accent text-primary-foreground hover:shadow-glow transition-shadow duration-300">
           <Link href="/" target="_blank">
             <Eye className="mr-2 h-4 w-4" />
             Live Preview
@@ -28,12 +28,12 @@ export default async function AdminDashboardPage() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 animate-fadeInUp animation-delay-200">
-        <Card>
+        <Card className="glass-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               Total Projects
             </CardTitle>
-            <ImageIcon className="h-4 w-4 text-muted-foreground" />
+            <ImageIcon className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{projectsCount}</div>
@@ -42,12 +42,12 @@ export default async function AdminDashboardPage() {
             </p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="glass-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               Contact Submissions
             </CardTitle>
-            <MessageSquare className="h-4 w-4 text-muted-foreground" />
+            <MessageSquare className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">+{messagesCount}</div>
@@ -56,10 +56,10 @@ export default async function AdminDashboardPage() {
             </p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="glass-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Blog Posts</CardTitle>
-            <BookCopy className="h-4 w-4 text-muted-foreground" />
+            <BookCopy className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{blogPostsCount}</div>
@@ -73,7 +73,7 @@ export default async function AdminDashboardPage() {
        <div className="animate-fadeInUp animation-delay-400">
         <h3 className="text-xl font-headline mb-4">Quick Actions</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Button variant="outline" asChild className="justify-start p-6 text-left h-auto">
+            <Button variant="outline" asChild className="justify-start p-6 text-left h-auto glow-border-hover">
               <Link href="/admin/projects/new">
                 <div className="flex items-center">
                   <PlusCircle className="mr-4 h-6 w-6 text-primary" />
@@ -84,7 +84,7 @@ export default async function AdminDashboardPage() {
                 </div>
               </Link>
             </Button>
-            <Button variant="outline" asChild className="justify-start p-6 text-left h-auto">
+            <Button variant="outline" asChild className="justify-start p-6 text-left h-auto glow-border-hover">
               <Link href="/admin/blog">
                 <div className="flex items-center">
                   <BookCopy className="mr-4 h-6 w-6 text-primary" />
@@ -95,7 +95,7 @@ export default async function AdminDashboardPage() {
                 </div>
               </Link>
             </Button>
-            <Button variant="outline" asChild className="justify-start p-6 text-left h-auto">
+            <Button variant="outline" asChild className="justify-start p-6 text-left h-auto glow-border-hover">
               <Link href="/admin/about">
                 <div className="flex items-center">
                   <Edit className="mr-4 h-6 w-6 text-primary" />

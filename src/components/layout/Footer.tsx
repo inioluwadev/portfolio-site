@@ -8,11 +8,11 @@ export default function Footer({ socialLinks, aboutContent }: { socialLinks: Soc
   const substackUrl = aboutContent?.substack_url || "";
 
   return (
-    <footer className="border-t border-border/40">
+    <footer className="border-t border-border/20 bg-background/50">
       <div className="container py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-2">
-            <h3 className="font-headline text-lg mb-4">Subscribe to my Substack</h3>
+            <h3 className="font-headline text-lg mb-4 text-gradient">Subscribe to my Substack</h3>
             <p className="text-foreground/60 mb-4 text-sm">
               Get insights on architecture, design, and innovation delivered to your inbox.
             </p>
@@ -35,7 +35,7 @@ export default function Footer({ socialLinks, aboutContent }: { socialLinks: Soc
             <SocialLinks links={socialLinks} />
           </div>
         </div>
-        <div className="mt-12 pt-8 border-t border-border/40 flex flex-col md:flex-row justify-between items-center text-sm text-foreground/60">
+        <div className="mt-12 pt-8 border-t border-border/20 flex flex-col md:flex-row justify-between items-center text-sm text-foreground/60">
           <p>&copy; {new Date().getFullYear()} Inioluwa Oladipupo. All rights reserved.</p>
           <p className="mt-4 md:mt-0">
             Designed with vision, built with code.

@@ -24,7 +24,7 @@ export default function AdminSidebar({ userEmail }: { userEmail?: string }) {
   return (
     <aside className="w-64 flex-shrink-0 border-r bg-background flex flex-col">
       <div className="p-4 border-b">
-        <Link href="/" className="font-headline text-lg font-bold">Inioluwa O. - Admin</Link>
+        <Link href="/" className="font-headline text-lg font-bold text-gradient">Inioluwa O. - Admin</Link>
       </div>
       <nav className="flex-1 p-4 space-y-1">
         {adminNavLinks.map((link) => {
@@ -36,7 +36,7 @@ export default function AdminSidebar({ userEmail }: { userEmail?: string }) {
               className={cn(
                 'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all',
                 isActive
-                  ? 'bg-primary text-primary-foreground'
+                  ? 'bg-gradient-to-r from-primary to-accent text-primary-foreground'
                   : 'text-muted-foreground hover:bg-muted hover:text-foreground'
               )}
             >

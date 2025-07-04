@@ -16,8 +16,8 @@ export default async function ManifestoPage() {
   return (
     <div className="container max-w-4xl mx-auto py-16 md:py-24 px-4">
       <header className="text-center mb-16 animate-fadeInUp">
-        <h1 className="font-headline text-5xl md:text-6xl">My Manifesto</h1>
-        <p className="mt-4 max-w-2xl mx-auto text-foreground/60 text-lg">
+        <h1 className="font-headline text-5xl md:text-6xl text-gradient">My Manifesto</h1>
+        <p className="mt-4 max-w-2xl mx-auto text-foreground/70 text-lg">
           The guiding principles that shape my work and philosophy.
         </p>
       </header>
@@ -34,7 +34,7 @@ export default async function ManifestoPage() {
 
         {principles.length > 0 ? (
           <>
-            <Separator className="my-16" />
+            <Separator className="my-16 bg-border/20" />
             <section className="space-y-12">
               {principles.map((principle, index) => (
                 <div
@@ -57,7 +57,7 @@ export default async function ManifestoPage() {
             </section>
           </>
         ) : (
-           <div className="text-center text-muted-foreground py-10">
+           <div className="text-center text-muted-foreground py-10 glass-card rounded-lg">
               <p className="font-medium">No principles defined yet.</p>
               <p className="text-sm">Add them in the admin dashboard to see them here.</p>
             </div>

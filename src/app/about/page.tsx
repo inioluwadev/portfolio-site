@@ -76,7 +76,7 @@ export default async function AboutPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
           <div className="md:col-span-1 animate-fadeInUp">
             {content.image_url && (
-              <Card className="overflow-hidden shadow-lg">
+              <Card className="overflow-hidden shadow-2xl shadow-primary/20 glow-border-hover">
                 <CardContent className="p-0">
                   <Image
                     src={content.image_url}
@@ -91,15 +91,15 @@ export default async function AboutPage() {
             )}
           </div>
           <div className="md:col-span-2 animate-fadeInUp animation-delay-200">
-            <h1 className="font-headline text-4xl md:text-5xl mb-6">
+            <h1 className="font-headline text-4xl md:text-5xl mb-6 text-gradient">
               {content.headline}
             </h1>
-            <div className="prose prose-lg dark:prose-invert max-w-none text-foreground/80 space-y-6">
+            <div className="prose prose-lg prose-invert max-w-none text-foreground/80 space-y-6">
               <p>{content.paragraph1}</p>
               <p>{content.paragraph2}</p>
             </div>
             <div className="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-6">
-              <Button asChild size="lg">
+              <Button asChild size="lg" className="group bg-gradient-to-r from-primary to-accent text-primary-foreground hover:shadow-glow transition-shadow duration-300">
                 <a href={content.cv_url} download>
                   <Download className="mr-2 h-4 w-4" />
                   Download CV
