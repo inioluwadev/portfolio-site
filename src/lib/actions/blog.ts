@@ -38,36 +38,45 @@ export async function syncBlogPosts() {
   try {
     const feed = await parser.parseURL(RSS_URL);
     if (!feed?.items) {
-      return { error: 'Could not fetch or parse the RSS feed.' };
+      return { error: 'Could not fetch or parse the RSS feed. The feed might be empty or unavailable.' };
     }
 
-    const postsToUpsert = feed.items.map(item => ({
-      guid: item.guid!,
-      title: item.title!,
-      link: item.link!,
-      pub_date: new Date(item.pubDate!).toISOString(),
-      preview: item.contentSnippet ? item.contentSnippet.substring(0, 200) + '...' : '',
-      tags: item.categories || [],
-    }));
+    const postsToUpsert = feed.items
+      .map(item => {
+        // A post must have a guid, title, link, and publication date to be valid.
+        if (!item.guid || !item.title || !item.link || !item.pubDate) {
+          console.warn('Skipping invalid RSS item:', item);
+          return null;
+        }
+        return {
+          guid: item.guid,
+          title: item.title,
+          link: item.link,
+          pub_date: new Date(item.pubDate).toISOString(),
+          preview: item.contentSnippet ? item.contentSnippet.substring(0, 200) + '...' : '',
+          tags: item.categories || [],
+        };
+      })
+      .filter((post): post is NonNullable<typeof post> => post !== null);
 
     if (postsToUpsert.length === 0) {
-      return { success: true, message: 'Blog is already up-to-date.' };
+      return { success: true, message: 'Blog is already up-to-date or no valid posts were found in the feed.' };
     }
 
     const { error } = await supabase.from('blog_posts').upsert(postsToUpsert, { onConflict: 'guid' });
 
     if (error) {
       console.error('Error upserting blog posts:', error);
-      return { error: 'Failed to save posts to the database.' };
+      return { error: `Failed to save posts to the database. Details: ${error.message}` };
     }
 
     revalidatePath('/blog');
     revalidatePath('/admin/blog');
     
-    return { success: true, message: `Synced ${postsToUpsert.length} posts.` };
+    return { success: true, message: `Successfully synced ${postsToUpsert.length} posts.` };
   } catch (e) {
     console.error('Error syncing Substack feed:', e);
     const errorMessage = e instanceof Error ? e.message : 'An unknown error occurred.';
-    return { error: `Failed to fetch from the RSS feed. Please check the URL. Details: ${errorMessage}` };
+    return { error: `Failed to fetch or parse the RSS feed. Please check the URL and feed format. Details: ${errorMessage}` };
   }
 }
