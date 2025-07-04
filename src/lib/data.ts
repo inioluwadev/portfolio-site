@@ -2,15 +2,21 @@
 import { createClient } from '@/lib/supabase/server';
 import type { AboutContent, BlogPost, ContactMessage, ManifestoCoreBelief, ManifestoPrinciple, Project, Settings, SocialLink } from '@/lib/types';
 
-// The standard supabase-js client is used for functions that run at build time (like generateStaticParams)
-// because they don't have access to the request cookies.
+// The standard supabase-js client is used for functions that run at build time or for public data
+// because they don't have access to the request cookies and should not depend on a user session.
 import { createClient as createAnonClient } from '@supabase/supabase-js';
 
-// --- Data Fetching Functions ---
+const getAnonClient = () => createAnonClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
+
+
+// --- Public Data Fetching Functions ---
 
 // About
 export async function getAboutContent(): Promise<AboutContent | null> {
-  const supabase = createClient();
+  const supabase = getAnonClient();
   const { data, error } = await supabase
     .from('about_content')
     .select('*')
@@ -26,7 +32,7 @@ export async function getAboutContent(): Promise<AboutContent | null> {
 
 // Blog
 export async function getBlogPosts(): Promise<BlogPost[]> {
-  const supabase = createClient();
+  const supabase = getAnonClient();
   const { data, error } = await supabase
     .from('blog_posts')
     .select('*')
@@ -53,7 +59,7 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
 
 // Manifesto
 export async function getManifestoCoreBelief(): Promise<ManifestoCoreBelief | null> {
-  const supabase = createClient();
+  const supabase = getAnonClient();
   const { data, error } = await supabase
     .from('manifesto_content')
     .select('core_belief')
@@ -68,7 +74,7 @@ export async function getManifestoCoreBelief(): Promise<ManifestoCoreBelief | nu
 }
 
 export async function getManifestoPrinciples(): Promise<ManifestoPrinciple[]> {
-  const supabase = createClient();
+  const supabase = getAnonClient();
   const { data, error } = await supabase
     .from('manifesto_principles')
     .select('*')
@@ -81,39 +87,9 @@ export async function getManifestoPrinciples(): Promise<ManifestoPrinciple[]> {
   return data || [];
 }
 
-export async function getManifestoPrincipleById(id: string): Promise<ManifestoPrinciple | null> {
-  const supabase = createClient();
-  const { data, error } = await supabase.from('manifesto_principles').select('*').eq('id', id).single();
-  if (error) {
-    console.error('Error fetching principle by ID:', error.message);
-    return null;
-  }
-  return data;
-}
-
-// Messages
-export async function getContactMessages(): Promise<ContactMessage[]> {
-  const supabase = createClient();
-  const { data, error } = await supabase
-    .from('contact_messages')
-    .select('*')
-    .order('created_at', { ascending: false });
-
-  if (error) {
-    console.error('Error fetching messages:', error.message);
-    return [];
-  }
-  return data || [];
-}
-
 // Projects
 export async function getProjects(filters?: { category?: string }): Promise<Project[]> {
-  // This function is called from generateStaticParams, which runs at build time.
-  // It cannot use the cookie-based server client, so we use a public, anonymous client.
-  const supabase = createAnonClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+  const supabase = getAnonClient();
   let query = supabase.from('projects').select('*').order('created_at', { ascending: false });
 
   if (filters?.category && filters.category !== 'All') {
@@ -129,18 +105,8 @@ export async function getProjects(filters?: { category?: string }): Promise<Proj
   return data || [];
 }
 
-export async function getProjectById(id: string): Promise<Project | null> {
-  const supabase = createClient();
-  const { data, error } = await supabase.from('projects').select('*').eq('id', id).single();
-  if (error) {
-    console.error('Error fetching project by ID:', error.message);
-    return null;
-  }
-  return data;
-}
-
 export async function getProjectBySlug(slug: string): Promise<Project | null> {
-    const supabase = createClient();
+    const supabase = getAnonClient();
     const { data, error } = await supabase.from('projects').select('*, seo_title, meta_description, og_image_url').eq('slug', slug).single();
     if (error) {
       console.error('Error fetching project by slug:', error.message);
@@ -151,7 +117,7 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
 
 // Settings
 export async function getSettings(): Promise<Settings | null> {
-  const supabase = createClient();
+  const supabase = getAnonClient();
   const { data, error } = await supabase
     .from('settings')
     .select('site_title, site_mode')
@@ -171,7 +137,7 @@ export async function getSettings(): Promise<Settings | null> {
 
 // Social Links
 export async function getSocialLinks(): Promise<SocialLink[]> {
-  const supabase = createClient();
+  const supabase = getAnonClient();
   const { data, error } = await supabase
     .from('social_links')
     .select('*')
@@ -182,6 +148,44 @@ export async function getSocialLinks(): Promise<SocialLink[]> {
     return [];
   }
   return data || [];
+}
+
+
+// --- Admin-Only Data Fetching Functions ---
+// These functions use the cookie-based client because they require an authenticated user.
+
+export async function getManifestoPrincipleById(id: string): Promise<ManifestoPrinciple | null> {
+  const supabase = createClient();
+  const { data, error } = await supabase.from('manifesto_principles').select('*').eq('id', id).single();
+  if (error) {
+    console.error('Error fetching principle by ID:', error.message);
+    return null;
+  }
+  return data;
+}
+
+export async function getContactMessages(): Promise<ContactMessage[]> {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from('contact_messages')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching messages:', error.message);
+    return [];
+  }
+  return data || [];
+}
+
+export async function getProjectById(id: string): Promise<Project | null> {
+  const supabase = createClient();
+  const { data, error } = await supabase.from('projects').select('*').eq('id', id).single();
+  if (error) {
+    console.error('Error fetching project by ID:', error.message);
+    return null;
+  }
+  return data;
 }
 
 export async function getSocialLinkById(id: string): Promise<SocialLink | null> {
