@@ -27,7 +27,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
   const headerImageContent = project.image_url;
 
   return (
-    <article>
+    <article className="animate-fadeInUp">
       <header className="relative h-[60vh] w-full">
         {headerImageContent ? (
             <Image
@@ -52,12 +52,13 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
       <div className="container mx-auto max-w-4xl py-16 md:py-24">
         <div className="prose prose-lg dark:prose-invert max-w-none">
           {details.map((detail, index) => {
+            const animationStyle = { animationDelay: `${index * 150}ms` };
             if (detail.type === 'text') {
-              return <p key={index}>{detail.content}</p>;
+              return <p key={index} className="animate-fadeInUp" style={animationStyle}>{detail.content}</p>;
             }
             if (detail.type === 'image' && detail.content) {
               return (
-                <div key={index} className="my-12">
+                <div key={index} className="my-12 animate-fadeInUp" style={animationStyle}>
                   <Image
                     src={detail.content}
                     alt={`${project.title} detail image ${index + 1}`}
@@ -70,7 +71,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
             }
             if (detail.type === 'quote') {
               return (
-                <blockquote key={index} className="my-12 border-l-4 border-primary pl-6 italic text-xl">
+                <blockquote key={index} className="my-12 border-l-4 border-primary pl-6 italic text-xl animate-fadeInUp" style={animationStyle}>
                   {detail.content}
                 </blockquote>
               );

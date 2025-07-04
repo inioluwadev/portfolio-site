@@ -26,7 +26,7 @@ export default async function AboutPage() {
   return (
     <div className="container max-w-5xl mx-auto py-16 md:py-24 px-4">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
-        <div className="md:col-span-1">
+        <div className="md:col-span-1 animate-fadeInUp">
           {content.image_url && (
             <Card className="overflow-hidden shadow-lg">
               <CardContent className="p-0">
@@ -41,7 +41,7 @@ export default async function AboutPage() {
             </Card>
           )}
         </div>
-        <div className="md:col-span-2">
+        <div className="md:col-span-2 animate-fadeInUp animation-delay-200">
           <h1 className="font-headline text-4xl md:text-5xl mb-6">
             {content.headline}
           </h1>
