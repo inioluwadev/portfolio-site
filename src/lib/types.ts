@@ -2,8 +2,7 @@ import { z } from 'zod';
 
 export const projectDetailSchema = z.object({
   type: z.enum(['text', 'image', 'quote']),
-  content: z.string().min(1, 'Content cannot be empty'),
-  imageHint: z.string().optional().nullable(),
+  content: z.string(),
 });
 
 export const projectSchema = z.object({
@@ -13,8 +12,7 @@ export const projectSchema = z.object({
   slug: z.string().min(3, 'Slug must be at least 3 characters.'),
   category: z.enum(['Architecture', 'Design', 'Innovation']),
   description: z.string().min(10, 'Description must be at least 10 characters.'),
-  image_url: z.string().url('Must be a valid URL.'),
-  image_hint: z.string().optional().nullable(),
+  image_url: z.string().url('Must be a valid URL.').optional().nullable(),
   details: z.array(projectDetailSchema).optional().nullable().default([]),
 });
 
@@ -25,11 +23,10 @@ export const aboutContentSchema = z.object({
   headline: z.string().min(3, 'Headline must be at least 3 characters.'),
   paragraph1: z.string().min(10, 'First paragraph is required.'),
   paragraph2: z.string().min(10, 'Second paragraph is required.'),
-  image_url: z.string().url('Must be a valid URL.'),
-  image_hint: z.string().optional().nullable(),
+  image_url: z.string().url('Must be a valid URL.').optional().nullable(),
   cv_url: z.string().min(1, "CV URL cannot be empty."),
-  substack_url: z.string().url({ message: "Must be a valid Substack URL." }).min(1, "Substack URL cannot be empty."),
-  rss_url: z.string().url({ message: "Must be a valid RSS Feed URL." }).min(1, "RSS Feed URL cannot be empty."),
+  substack_url: z.string().url({ message: "Must be a valid Substack URL." }).optional().nullable(),
+  rss_url: z.string().url({ message: "Must be a valid RSS Feed URL." }).optional().nullable(),
 });
 
 export type AboutContent = z.infer<typeof aboutContentSchema>;

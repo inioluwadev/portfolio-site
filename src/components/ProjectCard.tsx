@@ -4,6 +4,7 @@ import type { Project } from '@/lib/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ArrowRight } from 'lucide-react';
+import { ImageIcon } from 'lucide-react';
 
 type ProjectCardProps = {
   project: Project;
@@ -14,14 +15,20 @@ export default function ProjectCard({ project }: ProjectCardProps) {
     <Link href={`/projects/${project.slug}`} className="group block">
       <Card className="h-full overflow-hidden transition-all duration-300 ease-in-out group-hover:shadow-xl group-hover:-translate-y-1">
         <CardContent className="p-0">
-          <Image
-            src={project.image_url}
-            alt={project.title}
-            width={600}
-            height={400}
-            className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
-            data-ai-hint={project.image_hint ?? ''}
-          />
+          <div className="relative w-full h-48">
+            {project.image_url ? (
+              <Image
+                src={project.image_url}
+                alt={project.title}
+                fill
+                className="object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+            ) : (
+              <div className="w-full h-full bg-muted flex items-center justify-center">
+                <ImageIcon className="w-12 h-12 text-muted-foreground" />
+              </div>
+            )}
+          </div>
         </CardContent>
         <div className="p-6">
           <CardHeader className="p-0 mb-2">

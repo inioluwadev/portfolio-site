@@ -11,6 +11,7 @@ import { Save } from 'lucide-react';
 import { useFormState, useFormStatus } from 'react-dom';
 import { useToast } from '@/hooks/use-toast';
 import { useEffect } from 'react';
+import { ImageUpload } from '@/components/ui/ImageUpload';
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -99,22 +100,9 @@ export function AboutForm({ aboutContent, formAction }: AboutFormProps) {
           name="image_url"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Profile Image URL</FormLabel>
+              <FormLabel>Profile Image</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="https://placehold.co/600x800.png" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="image_hint"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Image AI Hint</FormLabel>
-              <FormControl>
-                <Input {...field} value={field.value ?? ''} placeholder="e.g. portrait person" />
+                <ImageUpload name={field.name} defaultValue={field.value} />
               </FormControl>
               <FormMessage />
             </FormItem>

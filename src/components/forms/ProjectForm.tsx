@@ -13,8 +13,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Trash2, PlusCircle, Save } from 'lucide-react';
 import { useFormState, useFormStatus } from 'react-dom';
 import { useToast } from '@/hooks/use-toast';
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import { ImageUpload } from '../ui/ImageUpload';
 
 function SubmitButton({ isEditing }: { isEditing: boolean }) {
   const { pending } = useFormStatus();
@@ -47,8 +48,7 @@ export function ProjectForm({ project, formAction }: ProjectFormProps) {
       slug: '',
       category: 'Architecture',
       description: '',
-      image_url: '',
-      image_hint: '',
+      image_url: null,
       details: [],
     },
   });
@@ -77,24 +77,18 @@ export function ProjectForm({ project, formAction }: ProjectFormProps) {
   };
 
   const addDetail = (type: ProjectDetail['type']) => {
-    append({ type, content: '', imageHint: '' });
+    append({ type, content: '' });
   };
   
-  const onSubmit = (data: Project) => {
-    const formData = new FormData();
-    Object.entries(data).forEach(([key, value]) => {
-      if (key === 'details') {
-        formData.append(key, JSON.stringify(value));
-      } else if (value) {
-        formData.append(key, value as string);
-      }
-    });
+  const clientAction = useCallback((formData: FormData) => {
+    const data = form.getValues();
+    formData.set('details', JSON.stringify(data.details));
     action(formData);
-  };
+  }, [action, form]);
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form action={clientAction} className="space-y-8">
         <Card>
           <CardHeader><CardTitle>Core Details</CardTitle></CardHeader>
           <CardContent className="space-y-4">
@@ -162,22 +156,9 @@ export function ProjectForm({ project, formAction }: ProjectFormProps) {
               name="image_url"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Main Image URL</FormLabel>
+                  <FormLabel>Main Image</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="https://placehold.co/600x400.png" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="image_hint"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Main Image AI Hint</FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value ?? ''} placeholder="e.g. modern building" />
+                    <ImageUpload name="image_url" defaultValue={field.value} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -191,7 +172,7 @@ export function ProjectForm({ project, formAction }: ProjectFormProps) {
           <CardContent>
             {fields.map((field, index) => (
               <div key={field.id} className="space-y-4 border p-4 rounded-md mb-4 relative">
-                <Button variant="ghost" size="icon" className="absolute top-2 right-2" onClick={() => remove(index)}>
+                <Button type="button" variant="ghost" size="icon" className="absolute top-2 right-2" onClick={() => remove(index)}>
                   <Trash2 className="h-4 w-4 text-destructive" />
                 </Button>
                 <FormField
@@ -212,7 +193,22 @@ export function ProjectForm({ project, formAction }: ProjectFormProps) {
                     </FormItem>
                   )}
                 />
-                 <FormField
+                 {form.watch(`details.${index}.type`) === 'image' ? (
+                  <FormField
+                    control={form.control}
+                    name={`details.${index}.content`}
+                    render={({ field: contentField }) => (
+                      <FormItem>
+                        <FormLabel>Image</FormLabel>
+                        <FormControl>
+                          <ImageUpload name={`details_image_${index}`} defaultValue={contentField.value} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                 ) : (
+                  <FormField
                     control={form.control}
                     name={`details.${index}.content`}
                     render={({ field: contentField }) => (
@@ -225,21 +221,7 @@ export function ProjectForm({ project, formAction }: ProjectFormProps) {
                       </FormItem>
                     )}
                   />
-                  {form.watch(`details.${index}.type`) === 'image' && (
-                     <FormField
-                        control={form.control}
-                        name={`details.${index}.imageHint`}
-                        render={({ field: hintField }) => (
-                          <FormItem>
-                            <FormLabel>Image AI Hint</FormLabel>
-                            <FormControl>
-                              <Input {...hintField} value={hintField.value ?? ''} placeholder="e.g. architectural sketch" />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                  )}
+                 )}
               </div>
             ))}
             <div className="flex gap-2 mt-4">

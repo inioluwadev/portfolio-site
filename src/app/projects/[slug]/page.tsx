@@ -19,23 +19,23 @@ export async function generateStaticParams() {
 export default async function ProjectDetailPage({ params }: ProjectDetailPageProps) {
   const project = await getProjectBySlug(params.slug);
 
-  if (!project || !project.details) {
+  if (!project) {
     notFound();
   }
-
-  const headerImage = project.details.find(d => d.type === 'image');
+  
+  const details = project.details || [];
+  const headerImageContent = project.image_url;
 
   return (
     <article>
       <header className="relative h-[60vh] w-full">
-        {headerImage ? (
+        {headerImageContent ? (
             <Image
-            src={headerImage.content}
+            src={headerImageContent}
             alt={project.title}
             layout="fill"
             objectFit="cover"
             className="z-0"
-            data-ai-hint={headerImage.imageHint ?? ''}
           />
         ) : (
           <div className="absolute inset-0 bg-muted z-0"></div>
@@ -51,11 +51,11 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
 
       <div className="container mx-auto max-w-4xl py-16 md:py-24">
         <div className="prose prose-lg dark:prose-invert max-w-none">
-          {project.details.map((detail, index) => {
+          {details.map((detail, index) => {
             if (detail.type === 'text') {
               return <p key={index}>{detail.content}</p>;
             }
-            if (detail.type === 'image') {
+            if (detail.type === 'image' && detail.content) {
               return (
                 <div key={index} className="my-12">
                   <Image
@@ -64,7 +64,6 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
                     width={1200}
                     height={800}
                     className="rounded-lg shadow-lg"
-                    data-ai-hint={detail.imageHint ?? ''}
                   />
                 </div>
               );

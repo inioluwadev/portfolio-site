@@ -27,18 +27,19 @@ export default async function AboutPage() {
     <div className="container max-w-5xl mx-auto py-16 md:py-24 px-4">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
         <div className="md:col-span-1">
-          <Card className="overflow-hidden shadow-lg">
-            <CardContent className="p-0">
-              <Image
-                src={content.image_url}
-                alt="Your Name"
-                width={600}
-                height={800}
-                className="object-cover"
-                data-ai-hint={content.image_hint ?? ''}
-              />
-            </CardContent>
-          </Card>
+          {content.image_url && (
+            <Card className="overflow-hidden shadow-lg">
+              <CardContent className="p-0">
+                <Image
+                  src={content.image_url}
+                  alt="Your Name"
+                  width={600}
+                  height={800}
+                  className="object-cover"
+                />
+              </CardContent>
+            </Card>
+          )}
         </div>
         <div className="md:col-span-2">
           <h1 className="font-headline text-4xl md:text-5xl mb-6">
